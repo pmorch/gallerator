@@ -1,13 +1,13 @@
-import re
 from dataclasses import dataclass, field
-from enum import Enum
 from PIL import Image
 from pathlib import Path
+from typing import Callable
 
 from rich import print
 
-from pmorch_gallery import constants, video_images
+from pmorch_gallery import constants, video_images, data_types
 from pmorch_gallery import thumbnails as thumbnails_module
+
 
 image_suffixes = {'.' + ext for ext in {
     "png",
@@ -27,29 +27,23 @@ video_suffixes = {'.' + ext for ext in {
 }}
 
 
-class MediaType(Enum):
-    UNKNOWN = 1
-    IMAGE = 2
-    VIDEO = 3
+def determine_media_type(path):
+    """Determine the media type of path, perhaps being UKNOWN"""
+    suffix = path.suffix.lower()
+    if suffix in image_suffixes:
+        return data_types.MediaType.IMAGE
+    elif suffix in video_suffixes:
+        return data_types.MediaType.VIDEO
+    else:
+        return data_types.MediaType.UNKNOWN
 
-    @staticmethod
-    def determine(path):
-        """Determine the media type of path, perhaps being UKNOWN"""
-        suffix = path.suffix.lower()
-        if suffix in image_suffixes:
-            return MediaType.IMAGE
-        elif suffix in video_suffixes:
-            return MediaType.VIDEO
-        else:
-            return MediaType.UNKNOWN
+def determine_known_media_type(path):
+    """Determine the media type of path, UKNOWN being an error"""
+    mediatype = determine_media_type(path)
+    if mediatype == data_types.MediaType.UNKNOWN:
+        raise ValueError(f"{path} does not have a known file extension")
+    return mediatype
 
-    @staticmethod
-    def determine_known(path):
-        """Determine the media type of path, UKNOWN being an error"""
-        mediatype = MediaType.determine(path)
-        if mediatype == MediaType.UNKNOWN:
-            raise ValueError(f"{path} does not have a known file extension")
-        return mediatype
 
 
 def find_media(src_path: Path, recursive: bool) -> list[Path]:
@@ -60,7 +54,7 @@ def find_media(src_path: Path, recursive: bool) -> list[Path]:
     for path in sorted(file_iterator):
         if path.is_dir():
             continue
-        if MediaType.determine(path) == MediaType.UNKNOWN:
+        if determine_media_type(path) == data_types.MediaType.UNKNOWN:
             continue
         media.append(path)
     return media
@@ -89,10 +83,10 @@ def register_derived_media(media, generated_dir):
     video_samples = video_images.VideoSamples(generated_dir)
     video_contact_sheets = video_images.VideoContactSheets(generated_dir)
     for path in media:
-        match MediaType.determine_known(path):
-            case MediaType.IMAGE:
+        match determine_known_media_type(path):
+            case data_types.MediaType.IMAGE:
                 thumbnails.register_source(path)
-            case MediaType.VIDEO:
+            case data_types.MediaType.VIDEO:
                 video_samples.register_source(path)
                 video_contact_sheets.register_source(path)
             case _:
@@ -103,73 +97,43 @@ def register_derived_media(media, generated_dir):
         video_contact_sheets=video_contact_sheets)
 
 
-class ImageInfo:
-    path: Path
-    width: int
-    height: int
+def create_image_info(abs_path, gallery_path):
+    path = abs_path.relative_to(gallery_path, walk_up=True)
+    im = Image.open(abs_path)
+    width, height = im.size
+    return data_types.ImageInfo(
+        path = path,
+        width = width,
+        height = height,
+    )
 
-    def __init__(self, abs_path, gallery_path):
-        self.path = abs_path.relative_to(gallery_path, walk_up=True)
-        im = Image.open(abs_path)
-        self.width, self.height = im.size
-
-    def __str__(self):
-        return f'ImageInfo: {self.path} {self.width}x{self.height}'
-
-
-@dataclass
-class MediaItem:
-    type: MediaType
-    title: str
-    thumbnail: ImageInfo
-    image: ImageInfo
-    video: Path | None
 
 
 def create_media_items(media, derived_media, gallery_path):
     items = []
     for path in media:
-        type = MediaType.determine_known(path)
+        type = determine_known_media_type(path)
         match type:
-            case MediaType.IMAGE:
+            case data_types.MediaType.IMAGE:
                 thumbnail = derived_media.thumbnails.generated_path(path)
                 image = path
                 video = None
-            case MediaType.VIDEO:
+            case data_types.MediaType.VIDEO:
                 thumbnail = derived_media.video_samples.generated_path(path)
                 image = derived_media.video_contact_sheets.generated_path(path)
                 video = path
             case _:
                 raise ValueError(f"Uknown type for {path}")
-        item = MediaItem(
+        item = data_types.MediaItem(
             type=type,
             title=path.name,
-            thumbnail=ImageInfo(thumbnail, gallery_path),
-            image=ImageInfo(image, gallery_path),
+            thumbnail=create_image_info(thumbnail, gallery_path),
+            image=create_image_info(image, gallery_path),
             video=video.relative_to(
                 gallery_path, walk_up=True) if video is not None else None
         )
         items.append(item)
     return items
-
-
-@dataclass
-class Directory:
-    name: str
-    path: list[str]
-    items: list[MediaItem] = field(default_factory=list)
-    subdirectories: "dict[Directory]" = field(default_factory=dict)
-
-    @staticmethod
-    def path_url(paths):
-        if len(paths) == 0:
-            return 'index.html'
-        else:
-            # Escape any ":" chars in directory names
-            return ("_".join([re.sub(r"_", "__", p) for p in paths])) + ".html"
-
-    def url(self):
-        return Directory.path_url(self.path)
 
 
 def create_missing_media(derived_media):
@@ -184,7 +148,11 @@ def create_missing_media(derived_media):
             obj.create_missing(missing)
 
 
-def create_directory_media(src_path: Path, gallery_path: Path, recursive=True):
+def create_directory_media(
+    src_path: Path,
+    gallery_path: Path,
+    directory_path_url: Callable[[list[Path]], str],
+    recursive=True):
     media = find_media(src_path, recursive)
     generated_dir = gallery_path / constants.generated_dir_basename
     derived_media = register_derived_media(media, generated_dir)
@@ -196,7 +164,7 @@ def create_directory_media(src_path: Path, gallery_path: Path, recursive=True):
             directory_media[directory], derived_media, gallery_path)
 
     directory_names = sorted(list(directory_media.keys()))
-    root = Directory(name='', path=[], items=flat_directory_items[''])
+    root = data_types.Directory(name='', path=[], items=flat_directory_items[''], url=directory_path_url([]))
     for dir in directory_names:
         # already setup root
         if dir == '':
@@ -206,8 +174,9 @@ def create_directory_media(src_path: Path, gallery_path: Path, recursive=True):
         for part in dir.split('/'):
             current_parts.append(part)
             if part not in current_dir.subdirectories:
-                current_dir.subdirectories[part] = Directory(
-                    name=part, path=current_parts.copy()
+                url = directory_path_url(current_parts)
+                current_dir.subdirectories[part] = data_types.Directory(
+                    name=part, path=current_parts.copy(), url=url
                 )
             current_dir = current_dir.subdirectories[part]
         current_dir.items = flat_directory_items[dir]

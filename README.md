@@ -151,3 +151,31 @@ PYTHONPATH=$w/pmorch-gallery/src $w/pmorch-gallery/venv/bin/python3 -m unittest 
 
 PYTHONPATH=$w/pmorch-gallery/src $w/pmorch-gallery/venv/bin/python3 -c 'import pmorch_gallery; pmorch_gallery.cli_main()' --help
 
+
+## Choice of slide-show-in-a-light-box library
+
+At first I implemented this with
+[nanogallery2](https://nanogallery2.nanostudio.org/) which has a simple API and
+is quick to get started with. But the
+[license](https://github.com/nanostudio-org/nanogallery2?tab=readme-ov-file#license--gplv3)
+GPLv3! I didn't notice that when I picked it.
+
+When [looking
+for](https://github.com/search?q=gallery&type=repositories&s=stars&o=desc)
+popular open-source, non-GPL3 libraries for this, there seem to be two
+contenders:
+
+* [swiper](https://github.com/nolimits4web/swiper) 40k stars
+* [PhotoSwipe](https://github.com/dimsemenov/PhotoSwipe) 24.3k stars
+
+Others don't even come close (nanogallery2 has 762 stars).
+
+I've tried to get swiper to [run in a
+lightbox](https://github.com/nolimits4web/swiper/discussions/4336#discussioncomment-11377361)
+bit it looks like that is going to be a lot of work, so PhotoSwipe seems to be
+it.
+
+In order to use Photoswipe, we'll need the dimensions for all the images. Which
+is probably a good idea, whatever lib we end up using.
+
+https://codesandbox.io/p/sandbox/photoswipe-rymtzg

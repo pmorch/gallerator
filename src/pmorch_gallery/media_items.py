@@ -1,6 +1,7 @@
 import re
 from dataclasses import dataclass, field
 from enum import Enum
+from PIL import Image
 from pathlib import Path
 
 from rich import print
@@ -102,12 +103,26 @@ def register_derived_media(media, generated_dir):
         video_contact_sheets=video_contact_sheets)
 
 
+class ImageInfo:
+    path: Path
+    width: int
+    height: int
+
+    def __init__(self, abs_path, gallery_path):
+        self.path = abs_path.relative_to(gallery_path, walk_up=True)
+        im = Image.open(abs_path)
+        self.width, self.height = im.size
+
+    def __str__(self):
+        return f'ImageInfo: {self.path} {self.width}x{self.height}'
+
+
 @dataclass
 class MediaItem:
     type: MediaType
     title: str
-    thumbnail: Path
-    image: Path
+    thumbnail: ImageInfo
+    image: ImageInfo
     video: Path | None
 
 
@@ -129,8 +144,8 @@ def create_media_items(media, derived_media, gallery_path):
         item = MediaItem(
             type=type,
             title=path.name,
-            thumbnail=thumbnail.relative_to(gallery_path, walk_up=True),
-            image=image.relative_to(gallery_path, walk_up=True),
+            thumbnail=ImageInfo(thumbnail, gallery_path),
+            image=ImageInfo(image, gallery_path),
             video=video.relative_to(
                 gallery_path, walk_up=True) if video is not None else None
         )
@@ -152,7 +167,7 @@ class Directory:
         else:
             # Escape any ":" chars in directory names
             return ("_".join([re.sub(r"_", "__", p) for p in paths])) + ".html"
-    
+
     def url(self):
         return Directory.path_url(self.path)
 

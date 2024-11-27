@@ -47,12 +47,6 @@ class VideoSamples(generated_set.GeneratedSet):
         seconds = int(thumbnail_seconds) % 60
         ratio = media_info.display_height / constants.thumbnail_height
         width = media_info.display_width / ratio
-        # print(" ".join([str(source),
-        #             '-t',
-        #             '-g', '1x1',
-        #             '--width', str(width),
-        #             '-m', f'{minutes}:{seconds}',
-        #             '-o', str(destination)]))
         run_vcsi(source,
                     '-t',
                     '-g', '1x1',

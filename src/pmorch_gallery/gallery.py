@@ -60,8 +60,8 @@ def create_template_vars(gallery_name, directory, parent):
     for item in directory.items:
         media_item = TemplateVars.MediaItem(
             title=item.title,
-            src_url=str(item.image),
-            thumbnail_url=str(item.thumbnail)
+            src_url=str(item.image.path),
+            thumbnail_url=str(item.thumbnail.path)
         )
         if item.video is not None:
             media_item.video_url = str(item.video)

@@ -1,7 +1,7 @@
 from .. import data_types
 from pathlib import Path
-import json
 import shutil
+import json
 
 
 from jinja2 import (
@@ -55,5 +55,4 @@ class Nanongallery2(data_types.Renderer):
 
 
 def renderer() -> data_types.Renderer:
-
     return Nanongallery2()

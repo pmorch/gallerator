@@ -1,8 +1,6 @@
 from enum import Enum
 from pathlib import Path
 from dataclasses import dataclass, field
-from pathlib import Path
-from PIL import Image
 
 
 class MediaType(Enum):

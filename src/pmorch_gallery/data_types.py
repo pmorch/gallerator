@@ -58,5 +58,11 @@ class TemplateVars:
     
 class Renderer:
     """Abstract base class for renderers to implement"""
+
     def render(self, template_vars: TemplateVars):
+        """Returns the contents of the index file for template_vars"""
+        raise NotImplementedError
+
+    def copy_static(self, gallery_path: Path):
+        """Copies any required files to gallery_path"""
         raise NotImplementedError

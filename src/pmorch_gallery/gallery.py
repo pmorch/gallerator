@@ -6,7 +6,8 @@ from pathlib import Path
 from rich import print
 
 
-from . import constants, media_items, data_types, nanogallery2
+from . import constants, media_items, data_types
+from .nanogallery2 import nanogallery2
 
 
 def directory_path_url(paths):
@@ -73,16 +74,16 @@ def write_gallery(
 
     root = media_items.create_directory_media(
         src_path, gallery_path, directory_path_url, recursive)
+
     renderer = nanogallery2.renderer()
     
     write_gallery_directory(renderer, gallery_name, gallery_path, root, None)
 
-    static = Path(__file__).parent / 'static'
-    print("Copying static files")
-    shutil.copytree(static, gallery_path / 'static', dirs_exist_ok=True)
+    print(f"Copying static files to {gallery_path}")
+    renderer.copy_static(gallery_path)
 
 
 if __name__ == "__main__":
     sample = Path(__file__).parent.parent.parent / "sample"
     gallery_path = sample.parent / 'gallery'
-    write_gallery(sample, gallery_path, True)
+    write_gallery(sample, gallery_path.resolve(), True)

@@ -1,5 +1,7 @@
-from . import data_types
+from .. import data_types
+from pathlib import Path
 import json
+import shutil
 
 
 from jinja2 import (
@@ -8,12 +10,14 @@ from jinja2 import (
     select_autoescape,
 )
 
+
 def jinja2_env():
     loader = loader = PackageLoader("pmorch_gallery")
     return Environment(
         loader=loader,
         autoescape=select_autoescape()
     )
+
 
 def json_dumps_media_items(media_items):
     items = []
@@ -37,9 +41,19 @@ class Nanongallery2(data_types.Renderer):
     def render(self, template_vars: data_types.TemplateVars):
         template = self.jenv.get_template("page.html")
         render_vars = template_vars.__dict__
-        render_vars["media_items_json"] = json_dumps_media_items(template_vars.media_items)
+        render_vars["media_items_json"] = json_dumps_media_items(
+            template_vars.media_items)
         return template.render(render_vars)
+
+    def copy_static(self, gallery_path: Path):
+        static = Path(__file__).parent / 'static'
+        shutil.copytree(static, gallery_path / 'static', dirs_exist_ok=True)
+        print(Path(__file__).parent.parent / 'static')
+        for f in (Path(__file__).parent.parent / 'static').glob('*'):
+            shutil.copy(f, gallery_path / 'static')
+        (gallery_path / 'static' / 'README.md').unlink()
 
 
 def renderer() -> data_types.Renderer:
+
     return Nanongallery2()

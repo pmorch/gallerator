@@ -1,14 +1,14 @@
-from .. import data_types
-from pathlib import Path
-import shutil
 import json
-
+import shutil
+from pathlib import Path
 
 from jinja2 import (
     Environment,
     PackageLoader,
     select_autoescape,
 )
+
+from .. import data_types
 
 
 def jinja2_env():
@@ -48,7 +48,6 @@ class Nanongallery2(data_types.Renderer):
     def copy_static(self, gallery_path: Path):
         static = Path(__file__).parent / 'static'
         shutil.copytree(static, gallery_path / 'static', dirs_exist_ok=True)
-        print(Path(__file__).parent.parent / 'static')
         for f in (Path(__file__).parent.parent / 'static').glob('*'):
             shutil.copy(f, gallery_path / 'static')
         (gallery_path / 'static' / 'README.md').unlink()

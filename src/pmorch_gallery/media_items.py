@@ -1,13 +1,11 @@
 from dataclasses import dataclass
-from PIL import Image
 from pathlib import Path
 from typing import Callable
 
-from rich import print
+from PIL import Image
 
-from pmorch_gallery import constants, video_images, data_types
+from pmorch_gallery import constants, data_types, video_images
 from pmorch_gallery import thumbnails as thumbnails_module
-
 
 image_suffixes = {'.' + ext for ext in {
     "png",

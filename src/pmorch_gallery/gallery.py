@@ -1,10 +1,7 @@
 import re
 from pathlib import Path
 
-from rich import print
-
-
-from . import constants, media_items, data_types
+from . import constants, data_types, media_items
 from .nanogallery2 import nanogallery2
 
 

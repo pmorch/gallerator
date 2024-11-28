@@ -3,6 +3,7 @@ from pathlib import Path
 
 from . import constants, data_types, dynimport, media_items
 from .nanogallery2 import nanogallery2
+from .photoswipe import photoswipe
 
 
 def directory_path_url(paths):
@@ -62,10 +63,10 @@ def write_gallery_directory(renderer, gallery_name, gallery_path,
 
 def get_renderer(renderer_arg):
     match renderer_arg:
+        case "PhotoSwipe":
+            return photoswipe.renderer()
         case "nanogallery2":
             return nanogallery2.renderer()
-        case "PhotoSwipe":
-            return 23
         case _:
             path = Path(renderer_arg)
             if not path.exists():

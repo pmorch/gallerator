@@ -52,6 +52,12 @@ class VideoSamples(generated_set.GeneratedSet):
                     '-g', '1x1',
                     '--width', int(width),
                     '--metadata-position', 'hidden',
+                    # We can't seem to hide timestamps completely, but this
+                    # makes them "very small".
+                    '--timestamp-format', '',
+                    # It doesn't look to me like --timestamp-font-size works at
+                    # all
+                    '--timestamp-font-size', '40',
                     '-m', f'{minutes}:{seconds}',
                     '-o', destination)
 

@@ -1,29 +1,3 @@
-.pswp__custom-caption {
-  /* background: rgba(75, 150, 75, 0.75); */
-  font-size: 16px;
-  /* color: #fff; */
-  /* width: calc(100% - 32px); */
-  /* max-width: 400px; */
-  padding: 2px 8px;
-  border-radius: 4px;
-  position: absolute;
-  left: 50%;
-  bottom: 16px;
-  text-align: center;
-  transform: translateX(-50%);
-  color: white;
-  text-shadow: 1px 1px 2px black, 0 0 25px #888, 0 0 5px black;}
-.pswp__custom-caption a {
-  text-decoration: underline;
-}
-
-.caption {
-  color: white;
-  text-shadow: 1px 1px 2px black, 0 0 25px #888, 0 0 5px black;
-  overflow-wrap: anywhere;
-}
-
-
 .pswp-gallery {
   display: flex;
   flex-wrap: wrap;
@@ -35,30 +9,54 @@
   flex-grow: 1000000000;
 }
 
-.pswp-gallery a {
+.pswp-gallery .image-container {
   flex-grow: 1;
   margin: 2px;
   position: relative;
 }
 
-.pswp-gallery a img {
+.pswp-gallery img.thumbnail {
   width: 100%;
-  height: 300px;
+  /* This value is explicity set in page.html since this is a static file */
+  /* height: auto; */
   /* One could also have used "contain" here */
   object-fit: cover; 
+  /* Avoid 2px height in layout */
   display: block;
 }
 
-.pswp-gallery a .caption {
+.pswp-gallery .image-container .caption {
   position: absolute;
   bottom: 0;
   left: 10px;
 }
 
-.pswp-gallery a .movie {
+.pswp-gallery .image-container .movie {
   color: white;
   position: absolute;
   top: 0;
   left: 10px;
   font-size: 20px;
+}
+
+.pswp__custom-caption {
+  font-size: 16px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  text-align: center;
+  transform: translateX(-50%);
+  font-size: 25px;
+}
+
+.pswp__custom-caption a {
+  text-decoration: underline;
+}
+
+.pswp__custom-caption, .pswp-gallery .image-container .caption {
+  color: white;
+  text-shadow: 1px 1px 2px black, 0 0 25px #888, 0 0 5px black;
+  overflow-wrap: anywhere;
 }

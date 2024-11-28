@@ -8,12 +8,18 @@
     <link rel="stylesheet" href="static/font-awesome.min.css">
     <meta charset="UTF-8" />
     <script type="module" src="static/page.js"></script>
+    <style>
+    .pswp-gallery img.thumbnail {
+      height: {{thumbnail_height}}px;
+    }
+    </style>
   </head>
 
   <body>
     <div class="pswp-gallery" id="my-gallery">
       {% for mi in media_items %}
       <a
+        class="image-container"
         href="{{mi.image.path}}"
         data-pswp-width="{{mi.image.width}}"
         data-pswp-height="{{mi.image.height}}"
@@ -26,6 +32,7 @@
         </div>
         {% endif %}
         <img
+          class="thumbnail"
           src="{{mi.thumbnail.path}}"
           tile="{{mi.title}}"
           alt="{{mi.title}}"

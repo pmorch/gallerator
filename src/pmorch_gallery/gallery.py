@@ -39,7 +39,7 @@ def create_template_vars(gallery_name, directory, parent):
         breadcrumbs=breadcrumbs,
         media_items=directory.items,
         thumbnail_height=constants.thumbnail_height,
-        subdirectories=directory.subdirectories
+        subdirectories=subdirectories
     )
 
     return template_vars

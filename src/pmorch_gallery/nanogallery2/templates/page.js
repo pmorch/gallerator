@@ -1,4 +1,4 @@
-    // code: language=jinja-js
+    {# code: language=jinja-js #}
     let items = {{ media_items_json | safe }}
     let thumbnailHeight = {{ thumbnail_height | tojson }}
 

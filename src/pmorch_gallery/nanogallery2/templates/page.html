@@ -1,79 +1,16 @@
 {# code: language=jinja-html #}
-<html>
-<head>
-  <title>
-    {% for breadcrumb in breadcrumbs %}
-    {{ breadcrumb.name }}
-      {% if not loop.last %}
-        /
-      {% endif %}
-    {% endfor %}
-    gallery
-  </title>
-  <link rel="icon" type="image/x-icon" href="static/favicon.ico">
-  <link href="static/bootstrap.min.css" rel="stylesheet">
-  <script src="static/bootstrap.bundle.min.js"></script>
-  {% include "head.html" %}
-  <style>
-    .breadcrumb-nav {
-      display: inline-block;
-    }
-  </style>
-</head>
+{% extends "bootstrap-gallery.html" %}
 
-<body>
-  <div class="container-fluid">
-    <!-- The "header" -->
-    <nav class="navbar bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="{{ breadcrumbs[0].url }}">
-          <img src="static/gallery-32.png" alt="Logo" width="32" height="32"
-            class="d-inline-block align-text-top">
-          {{ gallery_name}} gallery
-        </a>
-      </div>
-    </nav>
+{% block gallery_head %}
+  <script src="static/jquery.min.js"></script>
+  <script src="static/jquery.nanogallery2.min.js"></script>
+  <link rel="stylesheet" href="static/nanogallery2.min.css">
+  <script>
+{% include 'page.js' %}
+  </script>
+{% endblock %}
 
-    <!-- Path breadcrumbs -->
-    <div>
-      Path:
-      <nav class="breadcrumb-nav" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          {% for breadcrumb in breadcrumbs %}
-            {% if loop.last %}
-              <li class="breadcrumb-item disabled" aria-disabled="true" aria-current="page">
-                {{ breadcrumb.name }}
-              </li>
-            {% else %}
-              <li class="breadcrumb-item">
-                <a href="{{ breadcrumb.url }}">{{ breadcrumb.name }}</a>
-              </li>
-            {% endif %}
-          {% endfor %}
-        </ol>
-      </nav>
-    </div>
-
-    <!-- Navigation -->
-    {% if parent or subdirectories | length > 0 %}
-    <nav class="nav">
-      {% if parent %}
-        <a class="nav-link" href="{{ parent.url }}">Back to {{ gallery_name if parent.name == "" else parent.name }}</a>
-      {% endif %}
-      {% if subdirectories | length > 0 %}
-      <span class="nav-link disabled">Subdirectories:</span>
-      {% endif %}
-      {% for subdir in subdirectories %}
-      <a class="nav-link" href="{{ subdir.url }}">{{ subdir.name }}</a>
-      {% endfor %}
-    </nav>
-    {% endif %}
-
-
-    <!-- The gallery itself -->
-    <div id="nanogallery2"></div>
-  </div>
-
-</body>
-
-</html>
+{% block gallery_body %}
+  <!-- The gallery itself -->
+  <div id="nanogallery2"></div>
+{% endblock %}

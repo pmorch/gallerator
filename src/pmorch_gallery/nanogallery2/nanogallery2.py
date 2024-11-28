@@ -3,8 +3,10 @@ import shutil
 from pathlib import Path
 
 from jinja2 import (
+    ChoiceLoader,
     Environment,
     FileSystemLoader,
+    PackageLoader,
     select_autoescape,
 )
 
@@ -12,7 +14,10 @@ from pmorch_gallery import data_types
 
 
 def jinja2_env():
-    loader = FileSystemLoader(Path(__file__).parent / 'templates')
+    loader = ChoiceLoader([
+        PackageLoader('pmorch_gallery'),
+        FileSystemLoader(Path(__file__).parent / 'templates')
+    ])
     return Environment(
         loader=loader,
         autoescape=select_autoescape()
@@ -46,10 +51,14 @@ class Nanongallery2(data_types.Renderer):
         return template.render(render_vars)
 
     def copy_static(self, gallery_path: Path):
-        static = Path(__file__).parent / 'static'
-        shutil.copytree(static, gallery_path / 'static', dirs_exist_ok=True)
-        for f in (Path(__file__).parent.parent / 'static').glob('*'):
-            shutil.copy(f, gallery_path / 'static')
+        for src in [
+            Path(__file__).parent.parent / 'static',
+            Path(__file__).parent / 'static',
+        ]:
+            shutil.copytree(
+                src,
+                gallery_path / 'static', dirs_exist_ok=True
+            )
         (gallery_path / 'static' / 'README.md').unlink()
 
 

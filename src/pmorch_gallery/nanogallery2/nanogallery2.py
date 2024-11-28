@@ -8,7 +8,7 @@ from jinja2 import (
     select_autoescape,
 )
 
-from .. import data_types
+from pmorch_gallery import data_types
 
 
 def jinja2_env():

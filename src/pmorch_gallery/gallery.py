@@ -1,7 +1,7 @@
 import re
 from pathlib import Path
 
-from . import constants, data_types, media_items
+from . import constants, data_types, dynimport, media_items
 from .nanogallery2 import nanogallery2
 
 
@@ -60,25 +60,40 @@ def write_gallery_directory(renderer, gallery_name, gallery_path,
                                 directory)
 
 
+def get_renderer(renderer_arg):
+    match renderer_arg:
+        case "nanogallery2":
+            return nanogallery2.renderer()
+        case "PhotoSwipe":
+            return 23
+        case _:
+            path = Path(renderer_arg)
+            if not path.exists():
+                raise FileNotFoundError(path)
+            module = dynimport.import_random_module_from_path(renderer_arg)
+            if not hasattr(module, 'renderer'):
+                raise ValueError(
+                    f'Renderer {renderer_arg} does not have a renderer method')
+            renderer = module.renderer()
+            if not isinstance(renderer, data_types.Renderer):
+                raise ValueError(
+                    f'Renderer {renderer_arg}.render() does not return a Renderer instance')
+            return renderer
+
+
 def write_gallery(
         gallery_name,
         src_path,
         gallery_path,
         recursive,
-        template_dir):
+        renderer_arg):
 
     root = media_items.create_directory_media(
         src_path, gallery_path, directory_path_url, recursive)
 
-    renderer = nanogallery2.renderer()
-    
+    renderer = get_renderer(renderer_arg)
+
     write_gallery_directory(renderer, gallery_name, gallery_path, root, None)
 
     print(f"Copying static files to {gallery_path}")
     renderer.copy_static(gallery_path)
-
-
-if __name__ == "__main__":
-    sample = Path(__file__).parent.parent.parent / "sample"
-    gallery_path = sample.parent / 'gallery'
-    write_gallery(sample, gallery_path.resolve(), True)

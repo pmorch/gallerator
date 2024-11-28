@@ -4,8 +4,8 @@ from typing import Callable
 
 from PIL import Image
 
-from pmorch_gallery import constants, data_types, video_images
-from pmorch_gallery import thumbnails as thumbnails_module
+from . import constants, data_types, video_images
+from . import thumbnails as thumbnails_module
 
 image_suffixes = {'.' + ext for ext in {
     "png",

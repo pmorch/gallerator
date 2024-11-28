@@ -28,8 +28,12 @@ recursive_help = '''
 Whether to search for image and video files recursively.
 '''
 
-template_dir_help = '''
-Alternate directory for user templates
+renderer_help = '''
+Which renderer to use to actually produce the output galleries. At the moment,
+there are two built-in ones: "nanogallery2" and "PhotoSwipe". Advanced: Other
+values will be loaded as a module that is expected to have a renderer() method
+that returns an instance of pmorch_gallery.data_types.Renderer. That way you can
+render the gallery exactly like you want.
 '''
 
 def parse_args():
@@ -43,7 +47,7 @@ def parse_args():
                         help=gallery_dir_help, default=None)
     parser.add_argument('--recursive', '-r', help=recursive_help,
                         default=False, action='store_true')
-    parser.add_argument('--template-dir', default=None, help=template_dir_help)
+    parser.add_argument('--renderer', default='nanogallery2', help=renderer_help)
     args = parser.parse_args()
     return args
 
@@ -63,4 +67,4 @@ def cli_main():
         Path(args.source_dir).resolve(),
         Path(gallery_dir).resolve(),
         args.recursive,
-        args.template_dir)
+        args.renderer)

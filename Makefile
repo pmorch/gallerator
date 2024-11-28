@@ -18,11 +18,11 @@ ost:
 
 lint:
 	@echo Running ruff
-	$(ECHO)ruff check --select I
+	$(ECHO) ruff check --select I
 
 lint-fix:
 	@echo Running ruff --fix
-	$(ECHO) check --select I --fix
+	$(ECHO) ruff check --select I --fix
 
 test:
 	$(ECHO) python3 -m unittest src/pmorch_gallery/tests/*.py

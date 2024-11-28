@@ -15,7 +15,6 @@ def import_from_path(module_name, file_path):
 # I don't care about the module name, so create a random one.
 def import_random_module_from_path(file_path):
     module = 'dynimport_' + ''.join(random.choices(string.ascii_uppercase, k=20))
-    print(module)
     return import_from_path(module, file_path)
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ from pathlib import Path
 
 from jinja2 import (
     Environment,
-    PackageLoader,
+    FileSystemLoader,
     select_autoescape,
 )
 
@@ -12,7 +12,7 @@ from pmorch_gallery import data_types
 
 
 def jinja2_env():
-    loader = loader = PackageLoader("pmorch_gallery")
+    loader = FileSystemLoader(Path(__file__).parent / 'templates')
     return Environment(
         loader=loader,
         autoescape=select_autoescape()

@@ -4,7 +4,7 @@
 {% block gallery_head %}
     <link rel="stylesheet" href="static/photoswipe.css">
     <link rel="stylesheet" href="static/page.css">
-    <link rel="stylesheet" href="static/font-awesome.min.css">
+    <link rel="stylesheet" href="static/font-awesome/css/font-awesome.min.css">
     <meta charset="UTF-8" />
     <script type="module" src="static/page.js"></script>
     <style>
@@ -23,6 +23,10 @@
         href="{{mi.image.path}}"
         data-pswp-width="{{mi.image.width}}"
         data-pswp-height="{{mi.image.height}}"
+        data-file-name="{{mi.source.name}}"
+        {% if mi.video is not none %}
+        data-video="{{mi.video}}"
+        {% endif %}
         target="_blank"
         tile="{{mi.title}}"
       >
@@ -43,5 +47,4 @@
       </a>
       {% endfor %}
     </div>
-    <button id="open-1">Open Image 1</button>
 {% endblock %}

@@ -4,6 +4,7 @@
   <link href="static/bootstrap.min.css" rel="stylesheet">
   <link href="static/bootstrap-gallery.css" rel="stylesheet">
   <script src="static/bootstrap.bundle.min.js"></script>
+  <link rel="icon" type="image/x-icon" href="static/favicon.ico">
   <title>
     {% for breadcrumb in breadcrumbs %}
     {{ breadcrumb.name }}
@@ -24,7 +25,7 @@
         <a class="navbar-brand" href="{{ breadcrumbs[0].url }}">
           <img src="static/gallery-32.png" alt="Logo" width="32" height="32"
             class="d-inline-block align-text-top">
-          {{ gallery_name}} gallery
+          {{ gallery_name }} gallery
         </a>
       </div>
     </nav>

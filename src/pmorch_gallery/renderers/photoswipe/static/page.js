@@ -1,4 +1,3 @@
-console.log("pg")
 import PhotoSwipeLightbox from './photoswipe-lightbox.esm.min.js';
 const lightbox = new PhotoSwipeLightbox({
   gallery: '#my-gallery',
@@ -6,21 +5,20 @@ const lightbox = new PhotoSwipeLightbox({
   pswpModule: () => import('./photoswipe.esm.min.js')
 });
 
-
-lightbox.on('uiRegister', function() {
+// Show the current file name as a caption
+lightbox.on('uiRegister', function () {
   lightbox.pswp.ui.registerElement({
     name: 'custom-caption',
     order: 9,
     isButton: false,
     appendTo: 'root',
-    html: 'Caption',
+    html: '',
     onInit: (el, pswp) => {
       lightbox.pswp.on('change', () => {
         const currSlideElement = lightbox.pswp.currSlide.data.element;
         let captionHTML = '';
         if (currSlideElement) {
-          // get caption from alt attribute
-          captionHTML = currSlideElement.querySelector('img').getAttribute('alt');
+          captionHTML = currSlideElement.getAttribute('data-file-name');
         }
         el.innerHTML = captionHTML;
       });
@@ -28,10 +26,61 @@ lightbox.on('uiRegister', function() {
   });
 });
 
+// Show video link button for videos
+lightbox.on("uiRegister", function () {
+  console.log("uiRegister");
+  lightbox.pswp.ui.registerElement({
+    name: "video-button",
+    ariaLabel: "Video link",
+    order: 10,
+    isButton: true,
+    html: ``,
+    onInit: (el, pswp) => {
+      lightbox.pswp.on('change', () => {
+        const currSlideElement = lightbox.pswp.currSlide.data.element;
+        let videoButtonHTML = ''
+        if (currSlideElement.hasAttribute('data-video')) {
+          let videoURL = currSlideElement.getAttribute('data-video')
+          videoButtonHTML = `
+            <a href='${videoURL}' target="_blank">
+              <i class="fa fa-video-camera" aria-hidden="true">
+            </a>`
+        }
+        el.innerHTML = videoButtonHTML;
+      });
+    }
+  });
+});
 
-document.getElementById('open-1').addEventListener('click', (e) => {
-  e.preventDefault()
-  console.log('Open button')
-  return false
-})
+// Set window hash when we viewing an image in the lightbox
+lightbox.on("change", (el) => {
+  const currSlideElement = lightbox.pswp.currSlide.data.element;
+  window.location.hash = currSlideElement.getAttribute('data-file-name');
+});
+
+// Remove window hash when we close the lightbox
+lightbox.on("close", function () {
+  // https://stackoverflow.com/a/49373716/345716
+  history.replaceState(null, null, " ");
+});
+
 lightbox.init();
+
+// If the window opens with a window hash, open that image in the lightbox.
+if (window.location.hash != '') {
+  const source = window.location.hash
+  const containers = document.querySelectorAll('.image-container')
+  let foundIndex = null
+  for (let i = 0; i < containers.length; i++) {
+    if ('#' + containers[i].getAttribute('data-file-name') == source) {
+      foundIndex = i
+    }
+  }
+  if (foundIndex == null) {
+    console.error(`Couldn't find ${source} to open`)
+  } else {
+    lightbox.loadAndOpen(foundIndex, {
+      gallery: document.querySelector("#my-gallery"),
+    });
+  }
+}

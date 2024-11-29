@@ -127,6 +127,7 @@ def create_media_items(media, derived_media, gallery_path):
             title=path.name,
             thumbnail=create_image_info(thumbnail, gallery_path),
             image=create_image_info(image, gallery_path),
+            source=path,
             video=video.relative_to(
                 gallery_path, walk_up=True) if video is not None else None
         )

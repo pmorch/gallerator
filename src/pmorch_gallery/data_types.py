@@ -24,6 +24,7 @@ class MediaItem:
     title: str
     thumbnail: ImageInfo
     image: ImageInfo
+    source: Path
     video: Path | None
 
 

@@ -1,21 +1,21 @@
 {# code: language=jinja-html #}
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>{{gallery_name}}</title>
+{% extends "bootstrap-gallery.html" %}
+
+{% block gallery_head %}
     <link rel="stylesheet" href="static/photoswipe.css">
     <link rel="stylesheet" href="static/page.css">
     <link rel="stylesheet" href="static/font-awesome.min.css">
     <meta charset="UTF-8" />
     <script type="module" src="static/page.js"></script>
     <style>
-    .pswp-gallery img.thumbnail {
-      height: {{thumbnail_height}}px;
-    }
+      .pswp-gallery img.thumbnail {
+        height: {{thumbnail_height}}px;
+      }
     </style>
-  </head>
+{% endblock %}
 
-  <body>
+
+{% block gallery_body %}
     <div class="pswp-gallery" id="my-gallery">
       {% for mi in media_items %}
       <a
@@ -44,5 +44,4 @@
       {% endfor %}
     </div>
     <button id="open-1">Open Image 1</button>
-  </body>
-</html>
+{% endblock %}

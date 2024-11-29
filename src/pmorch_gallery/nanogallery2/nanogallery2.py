@@ -1,4 +1,3 @@
-import json
 import shutil
 from pathlib import Path
 
@@ -10,6 +9,7 @@ from jinja2 import (
     select_autoescape,
 )
 
+import pmorch_gallery
 from pmorch_gallery import data_types
 
 
@@ -52,7 +52,7 @@ class Nanongallery2(data_types.Renderer):
 
     def copy_static(self, gallery_path: Path):
         for src in [
-            Path(__file__).parent.parent / 'static',
+            Path(pmorch_gallery.__file__).parent / 'static',
             Path(__file__).parent / 'static',
         ]:
             shutil.copytree(

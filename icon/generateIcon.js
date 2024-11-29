@@ -13,7 +13,6 @@ const config = {
 
 await fontAwesomeIconGenerator(config)
 
-
 const src = `${staticDir}/gallery-512.png`;
 const faviconFileName = `${staticDir}/favicon.ico`
 const faviconName = `favicon.ico`

@@ -35,14 +35,14 @@ class Directory:
         Representation of a gallery directory. Uses absolute paths for files.
     """
     name: str
-    path: list[str]
+    path_segments: list[str]
     items: list[MediaItem] = field(default_factory=list)
     subdirectories: "dict[Directory]" = field(default_factory=dict)
 
 @dataclass
 class Breadcrumb:
     name: str
-    path: list[str]
+    path_segments: list[str]
 
 # Type of def/Callable that takes a path and a page_num that defaults to 0
 class PathToUrl(Protocol):
@@ -58,7 +58,7 @@ class TemplateVars:
     media_items: list[MediaItem]
     thumbnail_height: int
     subdirectories: list[Directory]
-    path_to_url: PathToUrl
+    path_segments_to_url: PathToUrl
     relative_url: Callable[[Path],str]
     
     

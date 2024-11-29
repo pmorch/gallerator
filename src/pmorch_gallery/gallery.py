@@ -18,26 +18,25 @@ def create_template_vars(
     breadcrumbs = [
         data_types.Breadcrumb(
             name=gallery_name,
-            path=[]
+            path_segments=[]
         )
     ]
-    path_so_far = []
-    for p in directory.path:
-        path_so_far.append(p)
+    path_segments_so_far = []
+    for p in directory.path_segments:
+        path_segments_so_far.append(p)
         breadcrumbs.append(data_types.Breadcrumb(
             name=p,
-            path=path_so_far.copy(),
+            path_segments=path_segments_so_far.copy(),
         ))
 
     # This is the absolute linux path of the current "directory", not the
     # current directory of the running python process.
     current_dir = (
-        gallery_path / page_url_strategy.page_url(directory.path)
+        gallery_path / page_url_strategy.page_url(directory.path_segments)
     ).parent
 
-    def path_to_url(path: list[Path], page_num: int = 0) -> str:
-        abs_page = gallery_path / page_url_strategy.page_url(path, page_num)
-        print(f'abs:{abs_page} cur:{current_dir}')
+    def path_segments_to_url(path_segments: list[Path], page_num: int = 0) -> str:
+        abs_page = gallery_path / page_url_strategy.page_url(path_segments, page_num)
         return str(abs_page.relative_to(current_dir, walk_up=True))
 
     def relative_url(path: Path) -> str:
@@ -51,7 +50,7 @@ def create_template_vars(
         media_items=directory.items,
         thumbnail_height=constants.thumbnail_height,
         subdirectories=subdirectories,
-        path_to_url=path_to_url,
+        path_segments_to_url=path_segments_to_url,
         relative_url=relative_url,
     )
 
@@ -65,7 +64,7 @@ def write_gallery_directory(renderer,
                             parent: data_types.Directory | None,
                             page_url_strategy: url_strategy.PageUrlStrategy,
                             pagination: int | None):
-    fname = gallery_path / page_url_strategy.page_url(directory.path)
+    fname = gallery_path / page_url_strategy.page_url(directory.path_segments)
     fname.parent.mkdir(exist_ok=True)
     print(f'Creating {fname}')
     template_vars = create_template_vars(

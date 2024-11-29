@@ -44,7 +44,7 @@
               </li>
             {% else %}
               <li class="breadcrumb-item">
-                <a href="{{ path_to_url(breadcrumb.path) }}">{{ breadcrumb.name }}</a>
+                <a href="{{ path_segments_to_url(breadcrumb.path_segments) }}">{{ breadcrumb.name }}</a>
               </li>
             {% endif %}
           {% endfor %}
@@ -57,13 +57,13 @@
     {% if parent or subdirectories | length > 0 %}
     <nav class="gallery-directories nav navigation-element">
       {% if parent %}
-        <a class="nav-link" href="{{ path_to_url(parent.path) }}">Back to {{ gallery_name if parent.name == "" else parent.name }}</a>
+        <a class="nav-link" href="{{ path_segments_to_url(parent.path_segments) }}">Back to {{ gallery_name if parent.name == "" else parent.name }}</a>
       {% endif %}
       {% if subdirectories | length > 0 %}
       <span class="nav-link disabled">Subdirectories:</span>
       {% endif %}
       {% for subdir in subdirectories %}
-      <a class="nav-link" href="{{ path_to_url(subdir.path) }}">{{ subdir.name }}</a>
+      <a class="nav-link" href="{{ path_segments_to_url(subdir.path_segments) }}">{{ subdir.name }}</a>
       {% endfor %}
     </nav>
     {% endif %}

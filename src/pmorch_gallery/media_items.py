@@ -160,18 +160,18 @@ def create_directory_media(
             directory_media[directory], derived_media, gallery_path)
 
     directory_names = sorted(list(directory_media.keys()))
-    root = data_types.Directory(name='', path=[], items=flat_directory_items[''])
+    root = data_types.Directory(name='', path_segments=[], items=flat_directory_items[''])
     for dir in directory_names:
         # already setup root
         if dir == '':
             continue
         current_dir = root
-        current_parts = []
+        current_path_segments = []
         for part in dir.split('/'):
-            current_parts.append(part)
+            current_path_segments.append(part)
             if part not in current_dir.subdirectories:
                 current_dir.subdirectories[part] = data_types.Directory(
-                    name=part, path=current_parts.copy()
+                    name=part, path_segments=current_path_segments.copy()
                 )
             current_dir = current_dir.subdirectories[part]
         current_dir.items = flat_directory_items[dir]

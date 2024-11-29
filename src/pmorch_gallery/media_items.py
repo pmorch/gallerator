@@ -46,16 +46,30 @@ def determine_known_media_type(path):
 
 def find_media(src_path: Path, recursive: bool) -> list[Path]:
     media = []
-    method = 'rglob' if recursive else 'glob'
-    # call src_path[method]
-    file_iterator = getattr(src_path, method)('*')
-    for path in sorted(file_iterator):
-        if path.is_dir():
-            continue
-        if determine_media_type(path) == data_types.MediaType.UNKNOWN:
-            continue
-        media.append(path)
-    return media
+    for root, dirs, files in src_path.walk():
+        if recursive:
+            # Skip over any _generated-images directories so we don't make
+            # thumbnails of thumnails ad nauseam.
+            if constants.generated_dir_basename in dirs:
+                dirs.remove(constants.generated_dir_basename)
+
+            # Skip over any static directories containing a favicon.ico,
+            # assuming they've been created by the gallery on a previous run.
+            # Yeah, this is a little ugly, with a hardcoded file name and all. I
+            # just couldn't bring myself to make 'static' a constant and
+            # incorporate it in templates and everything. So it is what it is.
+            # Patches welcome.
+            if 'static' in dirs and (root / 'static' / 'favicon.ico').exists():
+                dirs.remove('static')
+        else:
+            # If not recursive, don't go into any subdirs
+            dirs.clear()
+        for f in files:
+            fpath = root / f
+            if determine_media_type(fpath) == data_types.MediaType.UNKNOWN:
+                continue
+            media.append(fpath)
+    return sorted(media)
 
 
 def group_media_in_directories(media: list[Path], src_path):

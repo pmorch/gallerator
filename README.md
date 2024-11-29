@@ -2,7 +2,6 @@
 
 ## TODO
 
-* Handle if the gallery contains the images
 * Pagination: Currently if a folder has 1000 .jpg files, so will the (slow) gallery.
 * Delete previously generated, now-obsolete `.html` and thumbnails.
 * Documentation.

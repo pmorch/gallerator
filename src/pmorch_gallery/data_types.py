@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Protocol
+from typing import Callable, Protocol
 
 
 class MediaType(Enum):
@@ -51,6 +51,7 @@ class PathToUrl(Protocol):
 @dataclass
 class TemplateVars:
     gallery_name: str
+    gallery_root_url: str
     parent: Directory | None
     # Each element contains a name and a url
     breadcrumbs: list[Breadcrumb]
@@ -58,6 +59,7 @@ class TemplateVars:
     thumbnail_height: int
     subdirectories: list[Directory]
     path_to_url: PathToUrl
+    relative_url: Callable[[Path],str]
     
     
 class Renderer:

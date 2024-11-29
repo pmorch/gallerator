@@ -95,12 +95,11 @@ def register_derived_media(media, generated_dir):
         video_contact_sheets=video_contact_sheets)
 
 
-def create_image_info(abs_path, gallery_path):
-    path = abs_path.relative_to(gallery_path, walk_up=True)
+def create_image_info(abs_path):
     im = Image.open(abs_path)
     width, height = im.size
     return data_types.ImageInfo(
-        path = path,
+        path = abs_path,
         width = width,
         height = height,
     )
@@ -125,11 +124,10 @@ def create_media_items(media, derived_media, gallery_path):
         item = data_types.MediaItem(
             type=type,
             title=path.name,
-            thumbnail=create_image_info(thumbnail, gallery_path),
-            image=create_image_info(image, gallery_path),
+            thumbnail=create_image_info(thumbnail),
+            image=create_image_info(image),
             source=path,
-            video=video.relative_to(
-                gallery_path, walk_up=True) if video is not None else None
+            video=video
         )
         items.append(item)
     return items

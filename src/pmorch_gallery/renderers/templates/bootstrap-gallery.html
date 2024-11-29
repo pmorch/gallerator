@@ -1,10 +1,10 @@
 {# code: language=jinja-html #}
 <html>
 <head>
-  <link href="static/bootstrap.min.css" rel="stylesheet">
-  <link href="static/bootstrap-gallery.css" rel="stylesheet">
-  <script src="static/bootstrap.bundle.min.js"></script>
-  <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+  <link href="{{gallery_root_url}}/static/bootstrap.min.css" rel="stylesheet">
+  <link href="{{gallery_root_url}}/static/bootstrap-gallery.css" rel="stylesheet">
+  <script src="{{gallery_root_url}}/static/bootstrap.bundle.min.js"></script>
+  <link rel="icon" type="image/x-icon" href="{{gallery_root_url}}/static/favicon.ico">
   <title>
     {% for breadcrumb in breadcrumbs %}
     {{ breadcrumb.name }}
@@ -23,7 +23,7 @@
     <nav class="gallery-header navbar bg-body-tertiary">
       <div class="container-fluid">
         <a class="navbar-brand" href="{{ breadcrumbs[0].url }}">
-          <img src="static/gallery-32.png" alt="Logo" width="32" height="32"
+          <img src="{{gallery_root_url}}/static/gallery-32.png" alt="Logo" width="32" height="32"
             class="d-inline-block align-text-top">
           {{ gallery_name }} gallery
         </a>

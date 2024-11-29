@@ -4,7 +4,13 @@ from pathlib import Path
 from . import constants, data_types, dynimport, media_items, url_strategy
 
 
-def create_template_vars(gallery_name, directory, parent, page_url_strategy: url_strategy.PageUrlStrategy):
+def create_template_vars(
+    gallery_name: str,
+    gallery_path: Path,
+    directory: data_types.Directory,
+    parent: data_types.Directory,
+    page_url_strategy: url_strategy.PageUrlStrategy,
+):
     subdirectories = []
     for dir in sorted(directory.subdirectories):
         subdirectories.append(directory.subdirectories[dir])
@@ -23,17 +29,30 @@ def create_template_vars(gallery_name, directory, parent, page_url_strategy: url
             path=path_so_far.copy(),
         ))
 
-    def path_to_url(path: list[Path], page_num: int = 0):
-        return page_url_strategy.page_url(path, page_num)
+    # This is the absolute linux path of the current "directory", not the
+    # current directory of the running python process.
+    current_dir = (
+        gallery_path / page_url_strategy.page_url(directory.path)
+    ).parent
+
+    def path_to_url(path: list[Path], page_num: int = 0) -> str:
+        abs_page = gallery_path / page_url_strategy.page_url(path, page_num)
+        print(f'abs:{abs_page} cur:{current_dir}')
+        return str(abs_page.relative_to(current_dir, walk_up=True))
+
+    def relative_url(path: Path) -> str:
+        return str(path.relative_to(current_dir, walk_up=True))
 
     template_vars = data_types.TemplateVars(
         gallery_name=gallery_name,
+        gallery_root_url=str(gallery_path.relative_to(current_dir, walk_up=True)),
         parent=parent,
         breadcrumbs=breadcrumbs,
         media_items=directory.items,
         thumbnail_height=constants.thumbnail_height,
         subdirectories=subdirectories,
-        path_to_url=path_to_url
+        path_to_url=path_to_url,
+        relative_url=relative_url,
     )
 
     return template_vars
@@ -46,11 +65,16 @@ def write_gallery_directory(renderer,
                             parent: data_types.Directory | None,
                             page_url_strategy: url_strategy.PageUrlStrategy,
                             pagination: int | None):
-    fname: Path = gallery_path / page_url_strategy.page_url(directory.path)
+    fname = gallery_path / page_url_strategy.page_url(directory.path)
     fname.parent.mkdir(exist_ok=True)
     print(f'Creating {fname}')
     template_vars = create_template_vars(
-        gallery_name, directory, parent, page_url_strategy)
+        gallery_name,
+        gallery_path,
+        directory,
+        parent,
+        page_url_strategy
+    )
     html = renderer.render(template_vars)
     with open(fname, 'w') as file:
         file.write(html)
@@ -111,7 +135,8 @@ def write_gallery(
 
     renderer = get_renderer(renderer_arg)
 
-    page_url_strategy = url_strategy.UnderscorePageUrlStrategy()
+    # page_url_strategy = url_strategy.UnderscorePageUrlStrategy()
+    page_url_strategy = url_strategy.DirectoryPageUrlStrategy()
 
     write_gallery_directory(
         renderer,

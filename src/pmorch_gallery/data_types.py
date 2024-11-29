@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
+from typing import Protocol
 
 
 class MediaType(Enum):
@@ -35,14 +36,17 @@ class Directory:
     """
     name: str
     path: list[str]
-    url: str
     items: list[MediaItem] = field(default_factory=list)
     subdirectories: "dict[Directory]" = field(default_factory=dict)
 
 @dataclass
 class Breadcrumb:
     name: str
-    url: str
+    path: list[str]
+
+# Type of def/Callable that takes a path and a page_num that defaults to 0
+class PathToUrl(Protocol):
+    def __call__(self, path: list[Path], page_num: int = 0) -> str: ...
 
 @dataclass
 class TemplateVars:
@@ -53,6 +57,7 @@ class TemplateVars:
     media_items: list[MediaItem]
     thumbnail_height: int
     subdirectories: list[Directory]
+    path_to_url: PathToUrl
     
     
 class Renderer:

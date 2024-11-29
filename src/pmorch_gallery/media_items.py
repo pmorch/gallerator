@@ -150,7 +150,6 @@ def create_missing_media(derived_media):
 def create_directory_media(
     src_path: Path,
     gallery_path: Path,
-    directory_path_url: Callable[[list[Path]], str],
     recursive=True):
     media = find_media(src_path, recursive)
     generated_dir = gallery_path / constants.generated_dir_basename
@@ -163,7 +162,7 @@ def create_directory_media(
             directory_media[directory], derived_media, gallery_path)
 
     directory_names = sorted(list(directory_media.keys()))
-    root = data_types.Directory(name='', path=[], items=flat_directory_items[''], url=directory_path_url([]))
+    root = data_types.Directory(name='', path=[], items=flat_directory_items[''])
     for dir in directory_names:
         # already setup root
         if dir == '':
@@ -173,9 +172,8 @@ def create_directory_media(
         for part in dir.split('/'):
             current_parts.append(part)
             if part not in current_dir.subdirectories:
-                url = directory_path_url(current_parts)
                 current_dir.subdirectories[part] = data_types.Directory(
-                    name=part, path=current_parts.copy(), url=url
+                    name=part, path=current_parts.copy()
                 )
             current_dir = current_dir.subdirectories[part]
         current_dir.items = flat_directory_items[dir]

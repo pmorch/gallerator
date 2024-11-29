@@ -1,5 +1,13 @@
 # pmorch-gallery
 
+## TODO
+
+* Pagination: Currently if a folder has 1000 .jpg files, so will the (slow) gallery.
+* Handle if the gallery contains the images
+* Delete previously generated, now-obsolete `.html` and thumbnails.
+* `dir/sub_dir/file.html` instead of `dir_sub__dir_file.html`
+* Documentation.
+
 **NOTE**: This version uses the GPLv3 versioned nanogallery2. I should've used
 another MIT versioned gallery :-( This is the highest TODO-list item.
 

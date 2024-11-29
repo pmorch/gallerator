@@ -36,18 +36,28 @@ that returns an instance of pmorch_gallery.data_types.Renderer. That way you can
 render the gallery exactly like you want.
 '''
 
+pagination_help = '''
+The number of images per page
+'''
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         prog='pmorch-gallery',
         description='Create static thumbnail galleries',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('source_dir', help=source_dir_help)
-    parser.add_argument('--name-of-gallery', help=gallery_name_help, default=None)
+    parser.add_argument('--name-of-gallery',
+                        help=gallery_name_help, default=None)
     parser.add_argument('--gallery-dir', '-g',
                         help=gallery_dir_help, default=None)
     parser.add_argument('--recursive', '-r', help=recursive_help,
                         default=False, action='store_true')
     parser.add_argument('--renderer', default='PhotoSwipe', help=renderer_help)
+
+    parser.add_argument('--pagination', '-p',
+                        type=int,
+                        default=None, help=pagination_help)
     args = parser.parse_args()
     return args
 
@@ -67,4 +77,5 @@ def cli_main():
         Path(args.source_dir).resolve(),
         Path(gallery_dir).resolve(),
         args.recursive,
-        args.renderer)
+        args.renderer,
+        args.pagination)

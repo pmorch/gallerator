@@ -2,7 +2,7 @@ import fontAwesomeIconGenerator from 'font-awesome-icon-generator'
 import favicons from "favicons";
 import fs from "fs/promises";
 
-const staticDir='../src/pmorch_gallery/static'
+const staticDir='../src/pmorch_gallery/renderers/static'
 
 const config = {
   iconOutputFile: (size) => `${staticDir}/gallery-${size}.png`,

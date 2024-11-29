@@ -2,8 +2,6 @@ import re
 from pathlib import Path
 
 from . import constants, data_types, dynimport, media_items
-from .nanogallery2 import nanogallery2
-from .photoswipe import photoswipe
 
 
 def directory_path_url(paths):
@@ -62,15 +60,27 @@ def write_gallery_directory(renderer, gallery_name, gallery_path,
 
 
 def get_renderer(renderer_arg):
+    def get_renderer(path):
+        module = dynimport.import_random_module_from_path(path)
+        if not hasattr(module, 'renderer'):
+            raise ValueError(
+                f'Renderer {path} does not have a renderer method')
+        renderer = module.renderer()
+        if not isinstance(renderer, data_types.Renderer):
+            raise ValueError(
+                f'Renderer {path}.render() does not return a Renderer instance')
+        return renderer
+
     match renderer_arg:
         case "PhotoSwipe":
-            return photoswipe.renderer()
+            return get_renderer(
+                Path(__file__).parent / "renderers" /
+                "photoswipe" / "photoswipe.py")
         case "nanogallery2":
-            return nanogallery2.renderer()
+            return get_renderer(
+                Path(__file__).parent / "renderers" /
+                "nanogallery2" / "nanogallery2.py")
         case _:
-            path = Path(renderer_arg)
-            if not path.exists():
-                raise FileNotFoundError(path)
             module = dynimport.import_random_module_from_path(renderer_arg)
             if not hasattr(module, 'renderer'):
                 raise ValueError(

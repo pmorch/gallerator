@@ -1,0 +1,16 @@
+.breadcrumb-nav {
+  display: inline-block;
+}
+
+.navigation-element > :first-child {
+  padding-left: 2px;
+}
+
+.gallery-directories {
+  margin-bottom: 15px;
+}
+
+.gallery-breadcrumb-path {
+  color: var(--bs-gray);
+  margin-right: 10px;
+}

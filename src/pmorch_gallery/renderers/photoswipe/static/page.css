@@ -23,6 +23,8 @@
   object-fit: cover; 
   /* Avoid 2px height in layout */
   display: block;
+  border: 2px solid #777777;
+  border-radius: 3px;
 }
 
 .pswp-gallery .image-container .caption {

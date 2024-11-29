@@ -19,7 +19,7 @@
 <body>
   <div class="container-fluid">
     <!-- The "header" -->
-    <nav class="navbar bg-body-tertiary">
+    <nav class="gallery-header navbar bg-body-tertiary">
       <div class="container-fluid">
         <a class="navbar-brand" href="{{ breadcrumbs[0].url }}">
           <img src="static/gallery-32.png" alt="Logo" width="32" height="32"
@@ -30,8 +30,10 @@
     </nav>
 
     <!-- Path breadcrumbs -->
-    <div>
-      Path:
+    {# If there is only one directory, don't create a path #}
+    {% if breadcrumbs | length != 1 or subdirectories | length > 0 %}
+    <div class="gallery-breadcrumbs navigation-element">
+      <span class="gallery-breadcrumb-path">Path:</span>
       <nav class="breadcrumb-nav" aria-label="breadcrumb">
         <ol class="breadcrumb">
           {% for breadcrumb in breadcrumbs %}
@@ -48,10 +50,11 @@
         </ol>
       </nav>
     </div>
+    {% endif %}
 
     <!-- Navigation -->
     {% if parent or subdirectories | length > 0 %}
-    <nav class="nav">
+    <nav class="gallery-directories nav navigation-element">
       {% if parent %}
         <a class="nav-link" href="{{ parent.url }}">Back to {{ gallery_name if parent.name == "" else parent.name }}</a>
       {% endif %}

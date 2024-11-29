@@ -1,27 +1,8 @@
-import shutil
+import json
 from pathlib import Path
 
-from jinja2 import (
-    ChoiceLoader,
-    Environment,
-    FileSystemLoader,
-    PackageLoader,
-    select_autoescape,
-)
-
-import pmorch_gallery
 from pmorch_gallery import data_types
-
-
-def jinja2_env():
-    loader = ChoiceLoader([
-        PackageLoader('pmorch_gallery'),
-        FileSystemLoader(Path(__file__).parent / 'templates')
-    ])
-    return Environment(
-        loader=loader,
-        autoescape=select_autoescape()
-    )
+from pmorch_gallery.renderers import renderer_util
 
 
 def json_dumps_media_items(media_items):
@@ -40,8 +21,8 @@ def json_dumps_media_items(media_items):
 
 class Nanongallery2(data_types.Renderer):
     def __init__(self):
-        self.render_num = 0
-        self.jenv = jinja2_env()
+        self.jenv = renderer_util.jinja2_env(
+            Path(__file__).parent / 'templates')
 
     def render(self, template_vars: data_types.TemplateVars):
         template = self.jenv.get_template("page.html")
@@ -51,15 +32,8 @@ class Nanongallery2(data_types.Renderer):
         return template.render(render_vars)
 
     def copy_static(self, gallery_path: Path):
-        for src in [
-            Path(pmorch_gallery.__file__).parent / 'static',
-            Path(__file__).parent / 'static',
-        ]:
-            shutil.copytree(
-                src,
-                gallery_path / 'static', dirs_exist_ok=True
-            )
-        (gallery_path / 'static' / 'README.md').unlink()
+        renderer_util.copy_static(
+            Path(__file__).parent / 'static', gallery_path)
 
 
 def renderer() -> data_types.Renderer:

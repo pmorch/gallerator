@@ -6,6 +6,8 @@ import sys
 
 # https://docs.python.org/3/library/importlib.html#importing-a-source-file-directly
 def import_from_path(module_name, file_path):
+    if not file_path.exists():
+        raise FileNotFoundError(file_path)
     spec = importlib.util.spec_from_file_location(module_name, file_path)
     module = importlib.util.module_from_spec(spec)
     sys.modules[module_name] = module

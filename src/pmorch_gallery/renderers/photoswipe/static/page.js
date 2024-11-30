@@ -1,18 +1,21 @@
 import PhotoSwipeLightbox from './photoswipe-lightbox.esm.min.js';
+
+const custom_zoom_fraction = 0.9
+
 const lightbox = new PhotoSwipeLightbox({
   gallery: '#my-gallery',
   children: 'a',
   pswpModule: () => import('./photoswipe.esm.min.js'),
-  // secondaryZoomLevel: (zoomLevelObject) => {
-  //   // zoomLevelObject is instance of ZoomLevel class
-  //   console.log('Element size:', zoomLevelObject.elementSize);
-  //   console.log('Pan area size (viewport minus padding):', zoomLevelObject.panAreaSize);
-  //   console.log('Item index:', zoomLevelObject.index);
-  //   console.log('Item data:', zoomLevelObject.itemData);
-
-  //   // return desired zoom level
-  //   return 1;
-  // }
+  initialZoomLevel: (zoomLevelObject) => {
+    const zooms = []
+    for (const dim of ['x', 'y']) {
+      zooms.push(
+        zoomLevelObject.panAreaSize[dim] / zoomLevelObject.elementSize[dim]
+      )
+    }
+    return custom_zoom_fraction * Math.min(...zooms);
+  },
+  secondaryZoomLevel: 'fit',
 });
 
 // Show the current file name as a caption

@@ -22,16 +22,17 @@ class GeneratedSet:
         self.source_images.append(image)
 
     def divergence(self) -> tuple[list[Path], list[Path]]:
-        obsolete = []
+        obsolete = set(self.generated_dir.glob(self.generated_file_prefix() + '-*'))
         missing = []
         for f in self.source_images:
-            if not self.generated_path(f).exists():
+            generated_path = self.generated_path(f)
+            obsolete.discard(generated_path)
+            if not generated_path.exists():
                 missing.append(f)
-        return missing, obsolete
+        return missing, list(obsolete)
 
     def digest(self, path):
         if path not in self.digest_cache:
-            path
             with open(path, 'rb', buffering=0) as f:
                 digest = hashlib.file_digest(f, constants.digest).hexdigest()
             self.digest_cache[path] = digest
@@ -59,8 +60,9 @@ class GeneratedSet:
             # print("creating", source, destination)
             self.create_file(source, destination)
 
-    def remove_obsolete(self, obsolete):
-        pass
+    def unlink_obsolete(self, obsolete):
+        for path in obsolete:
+            path.unlink()
 
     def create_file(self, source, destination):
         raise NotImplementedError

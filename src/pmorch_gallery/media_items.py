@@ -159,7 +159,7 @@ def create_missing_media(derived_media):
             obj.create_missing(missing)
         if len(obsolete) > 0:
             print(f"Removing {len(obsolete)} obsolete {disp}")
-            obj.remove_obsolete(obsolete)
+            obj.unlink_obsolete(obsolete)
 
 
 def create_directory_media(

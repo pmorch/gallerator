@@ -19,19 +19,24 @@ class TestGeneratedSetImpl(generated_set.GeneratedSet):
     def generated_file_prefix(self):
         return "test"
 
+    def create_file(self, source, destination):
+        with open(destination, 'w') as f:
+            f.write(f'A file for {source}')
+
 
 class GeneratedSetTestCase(unittest.TestCase):
     def setUp(self) -> None:
         self.source_path = Path(__file__).parent / '../../../sample'
         self.sample_images = list(self.source_path.glob('*.jpg'))
-        self.sample_videos = sorted(list((self.source_path / 'More Videos').glob('*.mp4')))
+        self.sample_videos = sorted(
+            list((self.source_path / 'More Videos').glob('*.mp4')))
         self.assertTrue(self.source_path.exists())
         self.assertGreater(len(self.sample_images), 0)
         self.assertGreater(len(self.sample_videos), 0)
 
         self.tempdir = tempfile.TemporaryDirectory(
-            prefix="pmorch-gallery-" + self._testMethodName, 
-            delete=not(self.keep_test_data()))
+            prefix="pmorch-gallery-" + self._testMethodName,
+            delete=not (self.keep_test_data()))
         self.output_dir = Path(self.tempdir.name)
         if self.keep_test_data():
             print('Keeping test data in %s' % self.output_dir)
@@ -59,12 +64,25 @@ class TestGeneratedSet(GeneratedSetTestCase):
             f) for f in self.sample_images[0:2]]
         self.assertEqual(actual, expected)
 
-    def test_missing(self):
+    def test_divergence(self):
+        bogus_test_file = self.output_dir / \
+            f'test-{expected_file_digest(__file__)}.txt'
+        with open(bogus_test_file, 'w') as f:
+            f.write('bogus contents')
         for i in range(2):
             self.generatedset.register_source(self.sample_images[i])
+        missing, obsolete = self.generatedset.divergence()
         self.assertEqual(
-            self.generatedset.divergence(),
-            ([self.output_dir / f for f in self.sample_images[0:2]], [],)
+            (missing, obsolete,),
+            ([self.output_dir / f for f in self.sample_images[0:2]],
+             [bogus_test_file],)
+        )
+        self.generatedset.create_missing(missing)
+        self.generatedset.unlink_obsolete(obsolete)
+        missing, obsolete = self.generatedset.divergence()
+        self.assertEqual(
+            (missing, obsolete,),
+            ([], [],)
         )
 
     def test_paths(self):

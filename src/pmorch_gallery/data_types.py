@@ -44,10 +44,6 @@ class Breadcrumb:
     name: str
     path_segments: list[str]
 
-# Type of def/Callable that takes a path and a page_num that defaults to 0
-class PathToUrl(Protocol):
-    def __call__(self, path: list[Path], page_num: int = 0) -> str: ...
-
 @dataclass
 class TemplateVars:
     gallery_name: str
@@ -58,8 +54,13 @@ class TemplateVars:
     media_items: list[MediaItem]
     thumbnail_height: int
     subdirectories: list[Directory]
-    path_segments_to_url: PathToUrl
+    path_segments_to_url: Callable[[list[Path]],str]
     relative_url: Callable[[Path],str]
+    # 0 based - first page has page_num = 0
+    page_num: int
+    # total_pages == 1 (and page_num = 0) if pagination is disabled
+    total_pages: int
+    url_for_page_num: Callable[[int],str]
     
     
 class Renderer:

@@ -37,7 +37,7 @@ render the gallery exactly like you want.
 '''
 
 pagination_help = '''
-The number of images per page
+The maximum number of images per page. 0 means unlimited.
 '''
 
 
@@ -57,7 +57,7 @@ def parse_args():
 
     parser.add_argument('--pagination', '-p',
                         type=int,
-                        default=None, help=pagination_help)
+                        default=0, help=pagination_help)
     args = parser.parse_args()
     return args
 

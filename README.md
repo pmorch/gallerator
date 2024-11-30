@@ -2,9 +2,11 @@
 
 ## TODO
 
-* Pagination: Currently if a folder has 1000 .jpg files, so will the (slow) gallery.
-* Delete previously generated, now-obsolete `.html` and thumbnails.
-* Documentation.
+* Handle that some dirs (e.g. root) can be empty and only have subdirs
+* Pagination: Currently if a folder has 1000 .jpg files, so will the (slow)
+  gallery
+* Photoswipe zoom level can show image larger than real size
+* Documentation
 
 **NOTE**: This version uses the GPLv3 versioned nanogallery2. I should've used
 another MIT versioned gallery :-( This is the highest TODO-list item.

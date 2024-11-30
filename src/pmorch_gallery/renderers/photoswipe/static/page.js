@@ -2,7 +2,17 @@ import PhotoSwipeLightbox from './photoswipe-lightbox.esm.min.js';
 const lightbox = new PhotoSwipeLightbox({
   gallery: '#my-gallery',
   children: 'a',
-  pswpModule: () => import('./photoswipe.esm.min.js')
+  pswpModule: () => import('./photoswipe.esm.min.js'),
+  // secondaryZoomLevel: (zoomLevelObject) => {
+  //   // zoomLevelObject is instance of ZoomLevel class
+  //   console.log('Element size:', zoomLevelObject.elementSize);
+  //   console.log('Pan area size (viewport minus padding):', zoomLevelObject.panAreaSize);
+  //   console.log('Item index:', zoomLevelObject.index);
+  //   console.log('Item data:', zoomLevelObject.itemData);
+
+  //   // return desired zoom level
+  //   return 1;
+  // }
 });
 
 // Show the current file name as a caption
@@ -28,7 +38,6 @@ lightbox.on('uiRegister', function () {
 
 // Show video link button for videos
 lightbox.on("uiRegister", function () {
-  console.log("uiRegister");
   lightbox.pswp.ui.registerElement({
     name: "video-button",
     ariaLabel: "Video link",
@@ -55,7 +64,13 @@ lightbox.on("uiRegister", function () {
 // Set window hash when we viewing an image in the lightbox
 lightbox.on("change", (el) => {
   const currSlideElement = lightbox.pswp.currSlide.data.element;
-  window.location.hash = currSlideElement.getAttribute('data-file-name');
+  // Don't modify history, so don't use window.location.hash = ...
+  // https://stackoverflow.com/a/23924886/345716
+  history.replaceState(
+    undefined,
+    undefined,
+    "#" + currSlideElement.getAttribute('data-file-name')
+  )
 });
 
 // Remove window hash when we close the lightbox

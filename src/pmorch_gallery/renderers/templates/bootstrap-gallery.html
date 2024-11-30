@@ -68,6 +68,19 @@
     </nav>
     {% endif %}
 
+    {% if total_pages > 1 %}
+    <p>
+      Page: {{ page_num + 1 }} of {{ total_pages }} :
+      {% for p in range(total_pages) %}
+        {% if p == page_num %}
+        {{p + 1}}
+        {% else %}
+        <a href="{{url_for_page_num(p)}}">{{p + 1}}</a>
+        {% endif %}
+      {% endfor%}
+    </p>
+    {% endif %}
+
   {% block gallery_body %}
   {% endblock %}
   </div>

@@ -52,16 +52,7 @@ def create_template_vars_plural(
     current_media_item_index = 0
     template_vars_plural = []
 
-    # Some very large number to ensure we don't create more than one page
-    if pagination is None or pagination == 0:
-        pagination = 100000000
-    page_num = 0
-    total_pages = 1 + int(len(directory.items) / pagination)
-    while current_media_item_index < len(directory.items):
-        remaining = len(directory.items) - current_media_item_index
-        nr_items = min(remaining, pagination)
-        items = directory.items[current_media_item_index:
-                                current_media_item_index + nr_items]
+    def append_template_vars_plural(items, page_num, total_pages):
         template_vars = data_types.TemplateVars(
             gallery_name=gallery_name,
             gallery_root_url=str(gallery_path.relative_to(
@@ -78,8 +69,25 @@ def create_template_vars_plural(
             url_for_page_num=url_for_page_num,
         )
         template_vars_plural.append(template_vars)
-        current_media_item_index += nr_items
-        page_num += 1
+
+    # Some very large number to ensure we don't create more than one page
+    if pagination is None or pagination == 0:
+        pagination = 100000000
+
+    if len(directory.items) == 0:
+        # Every directory needs at least one page
+        append_template_vars_plural([], 0, 1)
+    else:
+        total_pages = 1 + int(len(directory.items) / pagination)
+        page_num = 0
+        while current_media_item_index < len(directory.items):
+            remaining = len(directory.items) - current_media_item_index
+            nr_items = min(remaining, pagination)
+            items = directory.items[current_media_item_index:
+                                    current_media_item_index + nr_items]
+            append_template_vars_plural(items, page_num, total_pages)
+            current_media_item_index += nr_items
+            page_num += 1
 
     return template_vars_plural
 

@@ -52,7 +52,6 @@ def find_media(src_path: Path, recursive: bool) -> list[Path]:
             # thumbnails of thumnails ad nauseam.
             if constants.generated_dir_basename in dirs:
                 dirs.remove(constants.generated_dir_basename)
-
             # Skip over any static directories containing a favicon.ico,
             # assuming they've been created by the gallery on a previous run.
             # Yeah, this is a little ugly, with a hardcoded file name and all. I
@@ -177,14 +176,18 @@ def create_directory_media(
             directory_media[directory], derived_media, gallery_path)
 
     directory_names = sorted(list(directory_media.keys()))
-    root = data_types.Directory(name='', path_segments=[], items=flat_directory_items[''])
+    if '' in flat_directory_items:
+        root_items = flat_directory_items['']
+    else:
+        root_items = []
+    root = data_types.Directory(name='', path_segments=[], items=root_items)
     for dir in directory_names:
         # already setup root
         if dir == '':
             continue
         current_dir = root
         current_path_segments = []
-        for part in dir.split('/'):
+        for part in Path(dir).parts:
             current_path_segments.append(part)
             if part not in current_dir.subdirectories:
                 current_dir.subdirectories[part] = data_types.Directory(

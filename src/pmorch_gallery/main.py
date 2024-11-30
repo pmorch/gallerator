@@ -1,8 +1,9 @@
 import argparse
 from pathlib import Path
 
-from . import constants, gallery
+from . import constants, data_types, dynimport, gallery
 
+from .renderer import Renderer
 gallery_name_help = '''
 The name of the gallery. Defaults the base name of the 'source_dir'.
 '''
@@ -41,7 +42,46 @@ The maximum number of images per page. 0 means unlimited.
 '''
 
 
+def get_renderer(renderer_arg):
+    def get_renderer(path):
+        if not Path(path).exists():
+            raise FileNotFoundError(path)
+        module = dynimport.import_random_module_from_path(path)
+        if not hasattr(module, 'renderer'):
+            raise ValueError(
+                f'Renderer {path} does not have a renderer method')
+        renderer = module.renderer()
+        if not isinstance(renderer, Renderer):
+            raise ValueError(
+                f'Renderer {path}.render() does not return a Renderer instance')
+        return renderer
+
+    match renderer_arg:
+        case "PhotoSwipe":
+            return get_renderer(
+                Path(__file__).parent / "renderers" /
+                "photoswipe" / "photoswipe.py")
+        case "nanogallery2":
+            return get_renderer(
+                Path(__file__).parent / "renderers" /
+                "nanogallery2" / "nanogallery2.py")
+        case _:
+            return get_renderer(renderer_arg)
+
+
 def parse_args():
+    def add_renderer_argument(parser):
+        parser.add_argument(
+            '--renderer', default='PhotoSwipe', help=renderer_help)
+
+    preparser = argparse.ArgumentParser(
+        prog='pmorch-gallery',
+        add_help=False
+    )
+    add_renderer_argument(preparser)
+    preargs, _ = preparser.parse_known_args()
+    renderer = get_renderer(preargs.renderer)
+
     parser = argparse.ArgumentParser(
         prog='pmorch-gallery',
         description='Create static thumbnail galleries',
@@ -53,17 +93,22 @@ def parse_args():
                         help=gallery_dir_help, default=None)
     parser.add_argument('--recursive', '-r', help=recursive_help,
                         default=False, action='store_true')
-    parser.add_argument('--renderer', default='PhotoSwipe', help=renderer_help)
-
     parser.add_argument('--pagination', '-p',
                         type=int,
                         default=0, help=pagination_help)
+    add_renderer_argument(parser)
+
+    renderer.add_argparse_args(parser)
+
     args = parser.parse_args()
-    return args
+
+    renderer.update_args(args)
+
+    return args, renderer
 
 
 def cli_main():
-    args = parse_args()
+    args, renderer = parse_args()
     if args.name_of_gallery is None:
         gallery_name = Path(args.source_dir).stem
     else:
@@ -77,5 +122,5 @@ def cli_main():
         Path(args.source_dir).resolve(),
         Path(gallery_dir).resolve(),
         args.recursive,
-        args.renderer,
+        renderer,
         args.pagination)

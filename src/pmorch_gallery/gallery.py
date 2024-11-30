@@ -1,7 +1,6 @@
-import re
 from pathlib import Path
 
-from . import constants, data_types, dynimport, media_items, url_strategy
+from . import constants, data_types, media_items, url_strategy
 
 
 def create_template_vars_plural(
@@ -127,51 +126,16 @@ def write_gallery_directory(renderer,
                                 pagination)
 
 
-def get_renderer(renderer_arg):
-    def get_renderer(path):
-        module = dynimport.import_random_module_from_path(path)
-        if not hasattr(module, 'renderer'):
-            raise ValueError(
-                f'Renderer {path} does not have a renderer method')
-        renderer = module.renderer()
-        if not isinstance(renderer, data_types.Renderer):
-            raise ValueError(
-                f'Renderer {path}.render() does not return a Renderer instance')
-        return renderer
-
-    match renderer_arg:
-        case "PhotoSwipe":
-            return get_renderer(
-                Path(__file__).parent / "renderers" /
-                "photoswipe" / "photoswipe.py")
-        case "nanogallery2":
-            return get_renderer(
-                Path(__file__).parent / "renderers" /
-                "nanogallery2" / "nanogallery2.py")
-        case _:
-            module = dynimport.import_random_module_from_path(renderer_arg)
-            if not hasattr(module, 'renderer'):
-                raise ValueError(
-                    f'Renderer {renderer_arg} does not have a renderer method')
-            renderer = module.renderer()
-            if not isinstance(renderer, data_types.Renderer):
-                raise ValueError(
-                    f'Renderer {renderer_arg}.render() does not return a Renderer instance')
-            return renderer
-
-
 def write_gallery(
         gallery_name,
         src_path,
         gallery_path,
         recursive,
-        renderer_arg,
+        renderer,
         pagination):
 
     root = media_items.create_directory_media(
         src_path, gallery_path, recursive)
-
-    renderer = get_renderer(renderer_arg)
 
     # page_url_strategy = url_strategy.UnderscorePageUrlStrategy()
     page_url_strategy = url_strategy.DirectoryPageUrlStrategy()

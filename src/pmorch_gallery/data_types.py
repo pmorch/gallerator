@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Callable, Protocol
+from typing import Callable
 
 
 class MediaType(Enum):
@@ -61,15 +61,3 @@ class TemplateVars:
     # total_pages == 1 (and page_num = 0) if pagination is disabled
     total_pages: int
     url_for_page_num: Callable[[int],str]
-    
-    
-class Renderer:
-    """Abstract base class for renderers to implement"""
-
-    def render(self, template_vars: TemplateVars):
-        """Returns the contents of the index file for template_vars"""
-        raise NotImplementedError
-
-    def copy_static(self, gallery_path: Path):
-        """Copies any required files to gallery_path"""
-        raise NotImplementedError

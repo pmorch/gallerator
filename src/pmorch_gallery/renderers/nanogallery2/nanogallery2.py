@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from pmorch_gallery import data_types
+from pmorch_gallery import data_types, renderer
 from pmorch_gallery.renderers import renderer_util
 
 
@@ -19,7 +19,7 @@ def json_dumps_media_items(media_items, relative_url):
     return json.dumps(items, indent=4)
 
 
-class Nanongallery2(data_types.Renderer):
+class Nanongallery2(renderer.Renderer):
     def __init__(self):
         self.jenv = renderer_util.jinja2_env(
             Path(__file__).parent / 'templates')
@@ -38,5 +38,5 @@ class Nanongallery2(data_types.Renderer):
             Path(__file__).parent / 'static', gallery_path)
 
 
-def renderer() -> data_types.Renderer:
+def renderer() -> renderer.Renderer:
     return Nanongallery2()

@@ -62,8 +62,10 @@ class TestGeneratedSet(GeneratedSetTestCase):
     def test_missing(self):
         for i in range(2):
             self.generatedset.register_source(self.sample_images[i])
-        self.assertEqual(self.generatedset.missing(),
-                         [self.output_dir / f for f in self.sample_images[0:2]])
+        self.assertEqual(
+            self.generatedset.divergence(),
+            ([self.output_dir / f for f in self.sample_images[0:2]], [],)
+        )
 
     def test_paths(self):
         expected = []

@@ -1,4 +1,5 @@
 import hashlib
+from pathlib import Path
 
 from tqdm import tqdm
 
@@ -20,12 +21,13 @@ class GeneratedSet:
         """registers an image for thumnail generation."""
         self.source_images.append(image)
 
-    def missing(self):
+    def divergence(self) -> tuple[list[Path], list[Path]]:
+        obsolete = []
         missing = []
         for f in self.source_images:
             if not self.generated_path(f).exists():
                 missing.append(f)
-        return missing
+        return missing, obsolete
 
     def digest(self, path):
         if path not in self.digest_cache:
@@ -56,6 +58,9 @@ class GeneratedSet:
             destination = self.generated_dir / self.generated_path(source)
             # print("creating", source, destination)
             self.create_file(source, destination)
+
+    def remove_obsolete(self, obsolete):
+        pass
 
     def create_file(self, source, destination):
         raise NotImplementedError

@@ -2,10 +2,6 @@ import unittest
 
 from pmorch_gallery import url_strategy
 
-import sys
-print("This is a test")
-print(sys.modules[__name__])
-
 
 class DirectoryPageUrlStrategyTest(unittest.TestCase):
     def setUp(self):

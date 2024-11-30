@@ -153,10 +153,13 @@ def create_missing_media(derived_media):
         ('Video Samples', derived_media.video_samples),
         ('Video Contact Sheets', derived_media.video_contact_sheets),
     ]:
-        missing = obj.missing()
+        missing, obsolete = obj.divergence()
         if len(missing) > 0:
-            print(f"Creating missing {disp}")
+            print(f"Creating {len(missing)} missing {disp}")
             obj.create_missing(missing)
+        if len(obsolete) > 0:
+            print(f"Removing {len(obsolete)} obsolete {disp}")
+            obj.remove_obsolete(obsolete)
 
 
 def create_directory_media(

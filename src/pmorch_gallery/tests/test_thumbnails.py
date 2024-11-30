@@ -12,7 +12,7 @@ class TestThumbnails(GeneratedSetTestCase):
     def test_create_missing(self):
         for i in range(2):
             self.thumbnails.register_source(self.sample_images[i])
-        missing = self.thumbnails.missing()
+        missing, obsolete = self.thumbnails.divergence()
         self.thumbnails.create_missing(missing)
         def expected1(f):
             digest = self.thumbnails.digest(f)
@@ -20,7 +20,10 @@ class TestThumbnails(GeneratedSetTestCase):
         expected = [expected1(f) for f in self.sample_images[0:2]]
         actual = list(self.output_dir.glob('*'))
         self.assertEqual(actual, expected)
-        self.assertEqual(self.thumbnails.missing(), [])
+        self.assertEqual(
+            self.thumbnails.divergence(),
+            ([], [],)
+        )
 
 if __name__ == '__main__':
     unittest.main()

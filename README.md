@@ -4,7 +4,6 @@
 
 * Pagination: Currently if a folder has 1000 .jpg files, so will the (slow)
   gallery
-  * disable text
   * Pagination controls
 * Documentation
 

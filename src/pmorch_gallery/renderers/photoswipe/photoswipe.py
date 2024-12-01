@@ -38,6 +38,13 @@ The width of the thumbnails. Only used by --auto-grid and --grid
 height_help = """
 The height of the thumbnails.
 """
+no_filename_captions_help = """
+Don't add the filenames of the images as a caption in the thumbnail gallery.
+This makes it look cleaner (especially for --grid and --auto-grid), but less
+information for the user. When the full image is shown in a lightbox, the file
+name is always shown, regardless of this setting.
+"""
+
 
 class Photoswipe(renderer.Renderer):
     def __init__(self):
@@ -52,6 +59,8 @@ class Photoswipe(renderer.Renderer):
         group.add_argument('--grid', help=grid_help)
         group.add_argument('--width', default=300, help=width_help)
         group.add_argument('--height', default=300, help=height_help)
+        group.add_argument('--no-filename-captions',
+                           action="store_true", help=no_filename_captions_help)
 
     def _set_grid_dimensions(self, args):
         self.grid = None
@@ -96,7 +105,9 @@ class Photoswipe(renderer.Renderer):
             f.write(template.render(
                 thumbnail_height=self.args.height,
                 thumbnail_width=self.args.width,
-                grid=self.grid))
+                grid=self.grid,
+                filename_captions=not(self.args.no_filename_captions)
+            ))
 
 
 def renderer() -> renderer.Renderer:

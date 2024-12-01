@@ -16,9 +16,13 @@
   width: {{thumbnail_width}}px;
   height: {{thumbnail_height}}px;
   text-align: center;
-  border: 1px solid #c1c1c188;
   margin: 5px;
   justify-self: center;
+  {# The only reason for the border is to not make the captions look out
+  of place. it is much cleaner-looking without the border. #}
+  {% if filename_captions %}
+  border: 1px solid #c1c1c188;
+  {% endif %}
 }
 
 .pswp-gallery.grid .image-container .movie {
@@ -97,6 +101,9 @@
 .pswp-gallery .image-container .caption {
   position: absolute;
   bottom: 0;
+  {% if not filename_captions %}
+  display: none;
+  {% endif%}
 }
 
 .pswp-gallery .image-container .movie {

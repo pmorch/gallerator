@@ -12,13 +12,32 @@ renderers have different options, so try "--renderer name-of-renderer --help" to
 see options for other renderers.
 """
 
-grid_help = """
-By default, Photoswipe uses a justified layout, but this will create a grid
-layout. Recommend to use "--grid 4x5", for 4 columns of 5 images, but supply your
-own "XxY" value to set your own grid layout. This will override any --pagination
-value.
+justified_help = """
+Use a justified layout (the default), where all images have the same height, but
+the width depends on the image. This is the most dense but different pages may
+not have the same height if used with pagination, so perhaps one other layouts
+are better with pagination.
 """
 
+auto_grid_help = """
+Use a grid layout but fit as many columns as will fit depending on screen width.
+"""
+
+grid_help = """
+By default, Photoswipe uses a justified layout, but this will create a grid
+layout. Try e.g. "--grid 4x5", for 4 columns by 5 rows, but supply your own
+"XxY" value to set your own grid layout. This will override any --pagination
+value. Beware that this is not responsive, so it will either be too wide on
+mobile or too narrow for large desktop users, or both.
+"""
+
+width_help = """
+The width of the thumbnails. Only used by --auto-grid and --grid
+"""
+
+height_help = """
+The height of the thumbnails.
+"""
 
 class Photoswipe(renderer.Renderer):
     def __init__(self):
@@ -28,8 +47,11 @@ class Photoswipe(renderer.Renderer):
     def add_argparse_args(self, parser: argparse.ArgumentParser):
         group = parser.add_argument_group(
             'Photoswipe', description=description)
+        group.add_argument('--justified', action='store_true', help=grid_help)
+        group.add_argument('--auto-grid', action='store_true', help=grid_help)
         group.add_argument('--grid', help=grid_help)
-        # group.add_argument('--bar', help='bar help')
+        group.add_argument('--width', default=300, help=width_help)
+        group.add_argument('--height', default=300, help=height_help)
 
     def _set_grid_dimensions(self, args):
         self.grid = None
@@ -43,7 +65,15 @@ class Photoswipe(renderer.Renderer):
             x = int(matches[1])
             y = int(matches[2])
             args.pagination = x * y
-            self.grid = { "x": x, "y": y}
+            self.grid = {
+                "type": "fixed-columns",
+                "x": x,
+                "y": y,
+            }
+        elif args.auto_grid:
+            self.grid = {
+                "type": "auto",
+            }
 
     def update_args(self, args: argparse.Namespace):
         self._set_grid_dimensions(args)
@@ -64,7 +94,8 @@ class Photoswipe(renderer.Renderer):
         template = self.jenv.get_template('page.css')
         with open(gallery_path / 'static' / 'page.css', 'w') as f:
             f.write(template.render(
-                thumbnail_height=constants.thumbnail_height,
+                thumbnail_height=self.args.height,
+                thumbnail_width=self.args.width,
                 grid=self.grid))
 
 

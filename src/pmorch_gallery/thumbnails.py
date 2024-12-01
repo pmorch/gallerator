@@ -1,4 +1,5 @@
 from PIL import Image
+import math
 
 from . import constants, generated_set
 
@@ -18,6 +19,7 @@ class Thumbnails(generated_set.GeneratedSet):
     def create_file(self, source, destination):
         im = Image.open(source)
         x, y = im.size
-        scale = y / constants.thumbnail_height
+        pixels = x * y
+        scale = math.sqrt(pixels / constants.thumbnail_target_pixels)
         im.thumbnail((x / scale, y / scale))
         im.save(destination)

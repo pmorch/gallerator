@@ -1,3 +1,4 @@
+import math
 import sys
 from contextlib import redirect_stdout
 
@@ -9,7 +10,7 @@ from . import constants, generated_set
 
 def run_vcsi(*args):
     old_sys_argv = sys.argv
-    sys.argv = ['vcsi'] + [ str(s) for s in args ]
+    sys.argv = ['vcsi'] + [str(s) for s in args]
     try:
         # vcsi is noisy and prints progress to stdout. Don't do that.
         with redirect_stdout(None):
@@ -45,21 +46,24 @@ class VideoSamples(generated_set.GeneratedSet):
             constants.video_thumbnail_time_fraction
         minutes = int(thumbnail_seconds / 60)
         seconds = int(thumbnail_seconds) % 60
-        ratio = media_info.display_height / constants.thumbnail_height
+        ratio = math.sqrt(
+            media_info.display_height * media_info.display_width
+            / constants.thumbnail_target_pixels)
         width = media_info.display_width / ratio
         run_vcsi(source,
-                    '-t',
-                    '-g', '1x1',
-                    '--width', int(width),
-                    '--metadata-position', 'hidden',
-                    # We can't seem to hide timestamps completely, but this
-                    # makes them "very small".
-                    '--timestamp-format', '',
-                    # It doesn't look to me like --timestamp-font-size works at
-                    # all
-                    '--timestamp-font-size', '40',
-                    '-m', f'{minutes}:{seconds}',
-                    '-o', destination)
+                 '-t',
+                 '-g', '1x1',
+                 '--width', int(width),
+                 '--metadata-position', 'hidden',
+                 # We can't seem to hide timestamps completely, but this
+                 # makes them "very small".
+                 '--timestamp-format', '',
+                 # It doesn't look to me like --timestamp-font-size works at
+                 # all
+                 '--timestamp-font-size', '40',
+                 '-m', f'{minutes}:{seconds}',
+                 '-o', destination)
+
 
 class VideoContactSheets(generated_set.GeneratedSet):
 

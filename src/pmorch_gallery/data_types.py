@@ -52,7 +52,6 @@ class TemplateVars:
     # Each element contains a name and a url
     breadcrumbs: list[Breadcrumb]
     media_items: list[MediaItem]
-    thumbnail_height: int
     subdirectories: list[Directory]
     path_segments_to_url: Callable[[list[Path]],str]
     relative_url: Callable[[Path],str]

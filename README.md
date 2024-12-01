@@ -4,11 +4,6 @@
 
 * Pagination: Currently if a folder has 1000 .jpg files, so will the (slow)
   gallery
-  * --grid
-    * auto
-    * width, height
-  * --justified
-    * height
   * disable text
   * Pagination controls
 * Documentation

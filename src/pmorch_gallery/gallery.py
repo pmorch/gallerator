@@ -59,7 +59,6 @@ def create_template_vars_plural(
             parent=parent,
             breadcrumbs=breadcrumbs,
             media_items=items,
-            thumbnail_height=constants.thumbnail_height,
             subdirectories=subdirectories,
             path_segments_to_url=path_segments_to_url,
             relative_url=relative_url,

@@ -2,7 +2,7 @@ generated_dir_basename = '_generated-images'
 
 digest = 'sha1'
 
-thumbnail_height = 300
+thumbnail_target_pixels = 350*350
 
 # If we just let vcsi create a single image, it will do so towards the
 # middle of the video. Testing shows that the first image in the contact

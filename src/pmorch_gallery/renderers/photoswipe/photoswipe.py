@@ -3,7 +3,7 @@ from pathlib import Path
 import argparse
 import re
 
-from pmorch_gallery import data_types, renderer
+from pmorch_gallery import constants, data_types, renderer
 from pmorch_gallery.renderers import renderer_util
 
 description = """
@@ -63,7 +63,9 @@ class Photoswipe(renderer.Renderer):
             Path(__file__).parent / 'static', gallery_path)
         template = self.jenv.get_template('page.css')
         with open(gallery_path / 'static' / 'page.css', 'w') as f:
-            f.write(template.render(thumbnail_height=200, grid=self.grid))
+            f.write(template.render(
+                thumbnail_height=constants.thumbnail_height,
+                grid=self.grid))
 
 
 def renderer() -> renderer.Renderer:

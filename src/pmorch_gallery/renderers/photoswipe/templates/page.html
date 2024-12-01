@@ -8,15 +8,13 @@
     <meta charset="UTF-8" />
     <script type="module" src="{{gallery_root_url}}/static/page.js"></script>
     <style>
-      .pswp-gallery img.thumbnail {
-        height: {{thumbnail_height}}px;
-      }
+    {% include "template-page.css" %}
     </style>
 {% endblock %}
 
 
 {% block gallery_body %}
-    <div class="pswp-gallery" id="my-gallery">
+    <div class="pswp-gallery grid" id="my-gallery">
       {% for mi in media_items %}
       <a
         class="image-container"

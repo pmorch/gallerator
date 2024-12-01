@@ -1,40 +1,99 @@
-.pswp-gallery {
+.pswp-gallery.grid {
+  display: grid;
+  /* This makes a fix number of columns */
+  grid-template-columns: repeat(4, 1fr);
+  /* This makes any number of columns depending on screen width, which is
+  perhaps better or at least also good */
+  /* grid-template-columns: repeat(auto-fill, minmax(300px, 1fr) ); */
+}
+
+.pswp-gallery.grid .image-container {
+  width: 300px;
+  height: 300px;
+  text-align: center;
+  border: 1px solid #c1c1c188;
+  margin: 5px;
+  justify-self: center;
+}
+
+.pswp-gallery.grid .image-container .movie {
+  color: black;
+  background: #ffffff94;
+  z-index: 100;
+  padding: 3px;
+}
+
+.pswp-gallery.grid .image-container .caption {
+  color: black;
+  overflow-wrap: anywhere;
+  background: #ffffff94;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pswp-gallery.grid img.thumbnail {
+  margin: auto;
+  height: inherit;
+  max-height: 100%;
+  max-width: 100%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  object-fit: contain;
+}
+
+.pswp-gallery.justified {
   display: flex;
   flex-wrap: wrap;
 }
 
 /* Make sure that the last row doesn't stretch the (fewer) elements. */
-.pswp-gallery::after {
+.pswp-gallery.justified::after {
   content: '';
   flex-grow: 1000000000;
 }
 
-.pswp-gallery .image-container {
+.pswp-gallery.justified .image-container {
   flex-grow: 1;
   margin: 2px;
+}
+
+.pswp-gallery.justified img.thumbnail {
+  width: 100%;
+  border: 2px solid #777777;
+  border-radius: 3px;
+}
+
+.pswp-gallery.justified .image-container .caption {
+  left: 10px;
+}
+
+.pswp-gallery.justified .image-container .movie {
+  color: white;
+}
+
+.pswp-gallery.justified img.thumbnail {
+  /* One could also have used "contain" here */
+  object-fit: cover;
+}
+
+
+.pswp-gallery .image-container {
   position: relative;
 }
 
+
 .pswp-gallery img.thumbnail {
-  width: 100%;
-  /* This value is explicity set in page.html since this is a static file */
-  /* height: auto; */
-  /* One could also have used "contain" here */
-  object-fit: cover; 
   /* Avoid 2px height in layout */
   display: block;
-  border: 2px solid #777777;
-  border-radius: 3px;
 }
 
 .pswp-gallery .image-container .caption {
   position: absolute;
   bottom: 0;
-  left: 10px;
 }
 
 .pswp-gallery .image-container .movie {
-  color: white;
   position: absolute;
   top: 0;
   right: 10px;
@@ -57,7 +116,7 @@
   text-decoration: underline;
 }
 
-.pswp__custom-caption, .pswp-gallery .image-container .caption {
+.pswp__custom-caption, .pswp-gallery.justified .image-container .caption {
   color: white;
   text-shadow: 1px 1px 2px black, 0 0 25px #888, 0 0 5px black;
   overflow-wrap: anywhere;

@@ -1,5 +1,6 @@
 import argparse
 import json
+import sys
 from pathlib import Path
 
 from pmorch_gallery import data_types, renderer
@@ -13,6 +14,29 @@ Beware of its license.
 
 height_help = """
 The height of the thumbnails.
+"""
+
+not_downloaded_message = """
+**************************************************************
+* !!! Nanogallery2 distribution files could not be found !!! *
+**************************************************************
+
+It looks like the nanogallery2 distribution files have not
+been downoaded. They are needed but not included with this
+distribution due to their GPLv3 license.
+
+If you have the source checked out, you can run
+
+    make download-nanogallery2
+
+from the top-level directory, or run
+
+    $module)location/renderers/nanogallery2/download.sh
+
+if you have installed the module with by some other means (e.g. pip), this could
+be something like:
+
+    ./venv/lib/python3.12/site-packages/pmorch_gallery/renderers/nanogallery2/download.sh
 """
 
 def json_dumps_media_items(media_items, relative_url):
@@ -50,8 +74,12 @@ class Nanongallery2(renderer.Renderer):
         return template.render(render_vars)
 
     def copy_static(self, gallery_path: Path):
+        static = Path(__file__).parent / 'static'
+        if not (static / 'jquery.nanogallery2.min.js').exists():
+            print(not_downloaded_message, file=sys.stderr)            
+            sys.exit(1)
         renderer_util.copy_static(
-            Path(__file__).parent / 'static', gallery_path)
+            static, gallery_path)
 
 
 def renderer() -> renderer.Renderer:

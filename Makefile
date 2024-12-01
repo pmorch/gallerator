@@ -26,3 +26,13 @@ lint-fix:
 
 test:
 	$(ECHO) python3 -m unittest src/pmorch_gallery/tests/*.py
+
+# If you want to use nanogallery2, you'll need to download the distribution
+# files. Do that with
+# make download-nanogallery2
+download-nanogallery2:
+	$(ECHO) ./src/pmorch_gallery/renderers/nanogallery2/download.sh
+
+# If you want to remove these files again
+remove-download-nanogallery2:
+	$(ECHO) ./src/pmorch_gallery/renderers/nanogallery2/removeDownloaded.sh

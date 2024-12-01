@@ -1,4 +1,0 @@
-{# code: language=jinja-css #}
-    .pswp-gallery img.thumbnail {
-      height: {{thumbnail_height}}px;
-    }

@@ -1,7 +1,9 @@
+{# code: language=jinja-css #}
+
 .pswp-gallery.grid {
   display: grid;
-  /* This makes a fix number of columns */
-  grid-template-columns: repeat(4, 1fr);
+  /* This makes a fixed number of columns */
+  grid-template-columns: repeat({{ grid.x }}, 1fr);
   /* This makes any number of columns depending on screen width, which is
   perhaps better or at least also good */
   /* grid-template-columns: repeat(auto-fill, minmax(300px, 1fr) ); */
@@ -86,6 +88,7 @@
 .pswp-gallery img.thumbnail {
   /* Avoid 2px height in layout */
   display: block;
+  height: {{thumbnail_height}}px;
 }
 
 .pswp-gallery .image-container .caption {

@@ -43,7 +43,7 @@ class Photoswipe(renderer.Renderer):
             x = int(matches[1])
             y = int(matches[2])
             args.pagination = x * y
-            self.grid = (x, y, )
+            self.grid = { "x": x, "y": y}
 
     def update_args(self, args: argparse.Namespace):
         self._set_grid_dimensions(args)
@@ -52,13 +52,18 @@ class Photoswipe(renderer.Renderer):
     def render(self, template_vars: data_types.TemplateVars):
         template = self.jenv.get_template("page.html")
         vars = template_vars.__dict__.copy()
-        vars['data_types'] = data_types
-        vars['grid'] = self.grid
+        vars.update({
+            'data_types': data_types,
+            'layout': 'justified' if self.grid is None else 'grid'
+        })
         return template.render(vars)
 
     def copy_static(self, gallery_path: Path):
         renderer_util.copy_static(
             Path(__file__).parent / 'static', gallery_path)
+        template = self.jenv.get_template('page.css')
+        with open(gallery_path / 'static' / 'page.css', 'w') as f:
+            f.write(template.render(thumbnail_height=200, grid=self.grid))
 
 
 def renderer() -> renderer.Renderer:

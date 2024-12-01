@@ -7,14 +7,11 @@
     <link rel="stylesheet" href="{{gallery_root_url}}/static/font-awesome/css/font-awesome.min.css">
     <meta charset="UTF-8" />
     <script type="module" src="{{gallery_root_url}}/static/page.js"></script>
-    <style>
-    {% include "template-page.css" %}
-    </style>
 {% endblock %}
 
 
 {% block gallery_body %}
-    <div class="pswp-gallery grid" id="my-gallery">
+    <div class="pswp-gallery {{layout}}" id="my-gallery">
       {% for mi in media_items %}
       <a
         class="image-container"

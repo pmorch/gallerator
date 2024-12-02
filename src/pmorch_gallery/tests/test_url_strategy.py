@@ -1,6 +1,6 @@
 import unittest
 
-from pmorch_gallery import url_strategy
+from gallerator import url_strategy
 
 
 class DirectoryPageUrlStrategyTest(unittest.TestCase):

@@ -1,4 +1,4 @@
-generated_dir_basename = '_generated-images'
+generated_dir_basename = 'generated-images'
 
 digest = 'sha1'
 

@@ -3,8 +3,8 @@ from pathlib import Path
 import argparse
 import re
 
-from pmorch_gallery import constants, data_types, renderer
-from pmorch_gallery.renderers import renderer_util
+from gallerator import constants, data_types, renderer
+from gallerator.renderers import renderer_util
 
 description = """
 These are the arguments for Photoswipe, the default renderer. Different

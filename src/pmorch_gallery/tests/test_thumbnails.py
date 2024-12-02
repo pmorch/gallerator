@@ -1,7 +1,7 @@
 import unittest
 
-from pmorch_gallery import thumbnails
-from pmorch_gallery.tests.test_generated_set import GeneratedSetTestCase
+from gallerator import thumbnails
+from gallerator.tests.test_generated_set import GeneratedSetTestCase
 
 
 class TestThumbnails(GeneratedSetTestCase):

@@ -3,8 +3,8 @@ import json
 import sys
 from pathlib import Path
 
-from pmorch_gallery import data_types, renderer
-from pmorch_gallery.renderers import renderer_util
+from gallerator import data_types, renderer
+from gallerator.renderers import renderer_util
 
 description = """
 These are the arguments for the nanogallery2 renderer.
@@ -36,7 +36,7 @@ from the top-level directory, or run
 if you have installed the module with by some other means (e.g. pip), this could
 be something like:
 
-    ./venv/lib/python3.12/site-packages/pmorch_gallery/renderers/nanogallery2/download.sh
+    ./venv/lib/python3.12/site-packages/gallerator/renderers/nanogallery2/download.sh
 """
 
 def json_dumps_media_items(media_items, relative_url):

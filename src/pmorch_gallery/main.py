@@ -33,7 +33,7 @@ renderer_help = '''
 Which renderer to use to actually produce the output galleries. At the moment,
 there are two built-in ones: "PhotoSwipe" and "nanogallery2". Advanced: Other
 values will be loaded as a module that is expected to have a renderer() method
-that returns an instance of pmorch_gallery.data_types.Renderer. That way you can
+that returns an instance of gallerator.data_types.Renderer. That way you can
 render the gallery exactly like you want.
 '''
 

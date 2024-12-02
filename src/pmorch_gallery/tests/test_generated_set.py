@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from pmorch_gallery import constants, generated_set
+from gallerator import constants, generated_set
 
 
 def expected_file_digest(path):

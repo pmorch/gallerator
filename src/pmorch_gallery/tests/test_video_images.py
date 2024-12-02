@@ -1,5 +1,5 @@
-from pmorch_gallery import video_images
-from pmorch_gallery.tests.test_generated_set import GeneratedSetTestCase
+from gallerator import video_images
+from gallerator.tests.test_generated_set import GeneratedSetTestCase
 
 
 class TestVideoSamples(GeneratedSetTestCase):

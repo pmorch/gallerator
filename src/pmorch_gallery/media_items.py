@@ -74,7 +74,7 @@ def find_media(src_path: Path, recursive: bool) -> list[Path]:
 def group_media_in_directories(media: list[Path], src_path):
     directories = {}
     for path in sorted(media):
-        dir = str(path.parent.resolve().relative_to(src_path))
+        dir = str(path.parent.relative_to(src_path))
         # special case for the root of the tree
         if dir == '.':
             dir = ''

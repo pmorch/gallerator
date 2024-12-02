@@ -89,11 +89,17 @@ class Photoswipe(renderer.Renderer):
         super().update_args(args)
 
     def render(self, template_vars: data_types.TemplateVars):
+        pagination = renderer_util.pagination_controls(
+            template_vars.page_num,
+            template_vars.total_pages,
+            template_vars.url_for_page_num
+        )
         template = self.jenv.get_template("page.html")
         vars = template_vars.__dict__.copy()
         vars.update({
             'data_types': data_types,
-            'layout': 'justified' if self.grid is None else 'grid'
+            'layout': 'justified' if self.grid is None else 'grid',
+            'pagination': pagination,
         })
         return template.render(vars)
 

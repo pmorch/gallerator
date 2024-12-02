@@ -119,8 +119,8 @@ def cli_main():
         gallery_dir = args.gallery_dir
     gallery.write_gallery(
         gallery_name,
-        Path(args.source_dir).resolve(),
-        Path(gallery_dir).resolve(),
+        Path(args.source_dir).absolute(),
+        Path(gallery_dir).absolute(),
         args.recursive,
         renderer,
         args.pagination)

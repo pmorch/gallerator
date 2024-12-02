@@ -2,9 +2,6 @@
 
 ## TODO
 
-* Pagination: Currently if a folder has 1000 .jpg files, so will the (slow)
-  gallery
-  * Pagination controls
 * Documentation
 
 **NOTE**: This version uses the GPLv3 versioned nanogallery2. I should've used

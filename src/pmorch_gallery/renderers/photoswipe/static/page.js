@@ -102,3 +102,28 @@ if (window.location.hash != '') {
     });
   }
 }
+
+window.addEventListener('keydown', (event) => {
+  const key = event.key; // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
+  if (key != "ArrowLeft" && key != "ArrowRight") {
+    return
+  }
+  if (lightbox.pswp) {
+    // lightbox is open and handles left/right
+    return
+  }
+  const paginations = document.querySelectorAll("li.page-item")
+  if (paginations.length == 0) {
+    return
+  }
+  let pagination
+  if (key == "ArrowLeft") {
+    pagination = paginations[0]
+  } else if (key == "ArrowRight") {
+    pagination = paginations[paginations.length-1]
+  }
+  const a = pagination.querySelector('a')
+  if (a) {
+    a.click()
+  }
+});

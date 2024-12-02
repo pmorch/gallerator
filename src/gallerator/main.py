@@ -75,7 +75,7 @@ def parse_args():
             '--renderer', default='PhotoSwipe', help=renderer_help)
 
     preparser = argparse.ArgumentParser(
-        prog='pmorch-gallery',
+        prog='gallerator',
         add_help=False
     )
     add_renderer_argument(preparser)
@@ -83,7 +83,7 @@ def parse_args():
     renderer = get_renderer(preargs.renderer)
 
     parser = argparse.ArgumentParser(
-        prog='pmorch-gallery',
+        prog='gallerator',
         description='Create static thumbnail galleries',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('source_dir', help=source_dir_help)

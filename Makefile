@@ -4,10 +4,6 @@ default:
 	$(ECHO)exit 1
 
 
-# see https://stackoverflow.com/questions/79232116
-# 	$(ECHO) . ./venv/bin/activate ; \
-# 		echo $(PWD)/src > $$(python3 -c 'import sysconfig; print(sysconfig.get_path("purelib"))')/pmorch-gallery.pth
-
 venv:
 	@echo Making venv
 	$(ECHO) python3 -m venv venv

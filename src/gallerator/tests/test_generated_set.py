@@ -35,7 +35,7 @@ class GeneratedSetTestCase(unittest.TestCase):
         self.assertGreater(len(self.sample_videos), 0)
 
         self.tempdir = tempfile.TemporaryDirectory(
-            prefix="pmorch-gallery-" + self._testMethodName,
+            prefix="gallerator-" + self._testMethodName,
             delete=not (self.keep_test_data()))
         self.output_dir = Path(self.tempdir.name)
         if self.keep_test_data():

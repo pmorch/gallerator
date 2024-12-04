@@ -32,3 +32,12 @@ download-nanogallery2:
 # If you want to remove these files again
 remove-download-nanogallery2:
 	$(ECHO) ./src/pmorch_gallery/renderers/nanogallery2/removeDownloaded.sh
+
+update-readme-usage:
+	@echo Updating README.md
+	$(ECHO) mv README.md orig.README.md
+	$(ECHO) cat orig.README.md | \
+		python3 ./release-tools/replace-section.py usage \
+		"$$(echo '```' ; gallerator --help ; echo '```')" > README.md
+
+update-docs: update-readme-usage

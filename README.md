@@ -51,26 +51,6 @@ $ gallerator -g /path/to/gallery /path/to/images
 # Profit - open the new gallery in your web browser
 $ xdg-open file:///path/to/images
 ```
-
-### Note on usage with NixOS
-
-When using NixOS I've seen errors with libaries. `fix-python` is the solution
-for that. So instead of the above for installation, do:
-
-```
-$ nix shell nixpkgs#{python312,libGL,ffmpeg,gcc} github:GuillaumeDesforges/fix-python
-$ python -m venv venv --copies
-$ source ./venv/bin/activate
-$ fix-python --venv venv
-$ pip3 install gallerator
-# I don't remember exactly when I was required to run fix-python
-$ fix-python --venv venv
-$ gallerator -g /path/to/gallery /path/to/images
-```
-
-But if you're using NixOS, that is perhpas enough of a hint to get you started
-(patches welcome).
-
 ## License
 
 MIT
@@ -78,6 +58,94 @@ MIT
 ## Repository
 
 https://github.com/pmorch/gallerator
+
+## Usage
+
+<!-- replace-section:usage -->
+```
+usage: gallerator [-h] [--name-of-gallery NAME_OF_GALLERY]
+                  [--gallery-dir GALLERY_DIR] [--recursive]
+                  [--pagination PAGINATION] [--renderer RENDERER]
+                  [--justified] [--auto-grid] [--grid GRID] [--width WIDTH]
+                  [--height HEIGHT] [--no-filename-captions]
+                  source_dir
+
+Create static thumbnail galleries
+
+positional arguments:
+  source_dir            The directory containing the source images and videos
+                        over which we want to create a gallery. Any sub-
+                        directory named generated-images in this directory
+                        will be ignored.
+
+options:
+  -h, --help            show this help message and exit
+  --name-of-gallery NAME_OF_GALLERY
+                        The name of the gallery. Defaults the base name of the
+                        'source_dir'. (default: None)
+  --gallery-dir GALLERY_DIR, -g GALLERY_DIR
+                        The directory in which to store the generated gallery.
+                        Defaults to the same as the 'source_dir' containing
+                        the images. Note that this directory should be "close"
+                        to the `source_dir` since relative paths are used when
+                        referencing source images from the gallery or you'll
+                        get many '../' elements in the image paths. (default:
+                        None)
+  --recursive, -r       Whether to search for image and video files
+                        recursively. (default: False)
+  --pagination PAGINATION, -p PAGINATION
+                        The maximum number of images per page. 0 means
+                        unlimited. (default: 0)
+  --renderer RENDERER   Which renderer to use to actually produce the output
+                        galleries. At the moment, there are two built-in ones:
+                        "PhotoSwipe" and "nanogallery2". Advanced: Other
+                        values will be loaded as a module that is expected to
+                        have a renderer() method that returns an instance of
+                        gallerator.data_types.Renderer. That way you can
+                        render the gallery exactly like you want. (default:
+                        PhotoSwipe)
+
+Photoswipe:
+  These are the arguments for Photoswipe, the default renderer. Different
+  renderers have different options, so try "--renderer name-of-renderer
+  --help" to see options for other renderers.
+
+  --justified           By default, Photoswipe uses a justified layout, but
+                        this will create a grid layout. Try e.g. "--grid 4x5",
+                        for 4 columns by 5 rows, but supply your own "XxY"
+                        value to set your own grid layout. This will override
+                        any --pagination value. Beware that this is not
+                        responsive, so it will either be too wide on mobile or
+                        too narrow for large desktop users, or both. (default:
+                        False)
+  --auto-grid           By default, Photoswipe uses a justified layout, but
+                        this will create a grid layout. Try e.g. "--grid 4x5",
+                        for 4 columns by 5 rows, but supply your own "XxY"
+                        value to set your own grid layout. This will override
+                        any --pagination value. Beware that this is not
+                        responsive, so it will either be too wide on mobile or
+                        too narrow for large desktop users, or both. (default:
+                        False)
+  --grid GRID           By default, Photoswipe uses a justified layout, but
+                        this will create a grid layout. Try e.g. "--grid 4x5",
+                        for 4 columns by 5 rows, but supply your own "XxY"
+                        value to set your own grid layout. This will override
+                        any --pagination value. Beware that this is not
+                        responsive, so it will either be too wide on mobile or
+                        too narrow for large desktop users, or both. (default:
+                        None)
+  --width WIDTH         The width of the thumbnails. Only used by --auto-grid
+                        and --grid (default: 300)
+  --height HEIGHT       The height of the thumbnails. (default: 300)
+  --no-filename-captions
+                        Don't add the filenames of the images as a caption in
+                        the thumbnail gallery. This makes it look cleaner
+                        (especially for --grid and --auto-grid), but less
+                        information for the user. When the full image is shown
+                        in a lightbox, the file name is always shown,
+                        regardless of this setting. (default: False)
+```
+<!-- /replace-section:usage -->
 
 
 ## Customizations - about renderers
@@ -146,3 +214,22 @@ still work. This may not be for everyone, and some may like something like
     * Allow flexible naming of thumbnails with or without SHA1 sums.
   * It would be great if generating screenshots and contact sheets for videos
     could be faster. Start with trying `vcsi --fast` 😜.
+
+### Note on usage with NixOS
+
+When using NixOS I've seen errors with libaries. `fix-python` is the solution
+for that. So instead of the above for installation, do:
+
+```
+$ nix shell nixpkgs#{python312,libGL,ffmpeg,gcc} github:GuillaumeDesforges/fix-python
+$ python -m venv venv --copies
+$ source ./venv/bin/activate
+$ fix-python --venv venv
+$ pip3 install gallerator
+# I don't remember exactly when I was required to run fix-python
+$ fix-python --venv venv
+$ gallerator -g /path/to/gallery /path/to/images
+```
+
+But if you're using NixOS, that is perhpas enough of a hint to get you started
+(patches welcome).

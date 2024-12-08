@@ -74,9 +74,7 @@ Create static thumbnail galleries
 
 positional arguments:
   source_dir            The directory containing the source images and videos
-                        over which we want to create a gallery. Any sub-
-                        directory named generated-images in this directory
-                        will be ignored.
+                        over which we want to create a gallery.
 
 options:
   -h, --help            show this help message and exit
@@ -214,6 +212,16 @@ still work. This may not be for everyone, and some may like something like
     * Allow flexible naming of thumbnails with or without SHA1 sums.
   * It would be great if generating screenshots and contact sheets for videos
     could be faster. Start with trying `vcsi --fast` 😜.
+  * A little more care and love could be given to generation of thumbnails.
+    * Right now we simply use `PIL.Image.thumbnail(x,y)` - is that enough?
+    * We always scale thumbnails to have 350*350 total pixels, but we probably
+      should scale thumbnails to the width, height and/or layout that will
+      actually be used.
+    * We always link to the source image, however large that may be. Perhaps we
+      should also provide (optional?) scaling of the source images, so we don't
+      serve multi-megabyte images when you click on the thumbnail. See e.g.
+      [Efficient Image Resizing With ImageMagick— Smashing
+      Magazine](https://www.smashingmagazine.com/2015/06/efficient-image-resizing-with-imagemagick/)
 
 ### Note on usage with NixOS
 

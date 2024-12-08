@@ -11,9 +11,6 @@ The name of the gallery. Defaults the base name of the 'source_dir'.
 source_dir_help = f'''
 The directory containing the source images and videos over which we want to
 create a gallery.
-
-Any sub-directory named {constants.generated_dir_basename} in this directory
-will be ignored.
 '''
 
 gallery_dir_help = '''

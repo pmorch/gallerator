@@ -35,9 +35,6 @@ remove-download-nanogallery2:
 
 update-readme-usage:
 	@echo Updating README.md
-	$(ECHO) mv README.md orig.README.md
-	$(ECHO) cat orig.README.md | \
-		python3 ./release-tools/replace-section.py usage \
-		"$$(echo '```' ; gallerator --help ; echo '```')" > README.md
+	$(ECHO) ./release-tools/replace-markdown-block.sh README.md usage
 
 update-docs: update-readme-usage

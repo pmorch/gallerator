@@ -1,13 +1,18 @@
 #!/usr/bin/env/python3
 
-import argparse
 import sys
 from pathlib import Path
 
 """
 Usage:
 
+# If you have sponge from moreutils
+
 cat source.txt | $0 section_name replacement | sponge source.txt
+
+# else
+
+cat source.txt | $0 section_name replacement > source-new.txt
 """
 
 def replace(orig: str, section: str, replacement: str):

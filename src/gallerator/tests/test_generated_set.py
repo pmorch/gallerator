@@ -26,10 +26,10 @@ class TestGeneratedSetImpl(generated_set.GeneratedSet):
 
 class GeneratedSetTestCase(unittest.TestCase):
     def setUp(self) -> None:
-        self.source_path = Path(__file__).parent / '../../../sample'
+        self.source_path = Path(__file__).parent / '../../../../demo-gallerator/media'
         self.sample_images = list(self.source_path.glob('*.jpg'))
         self.sample_videos = sorted(
-            list((self.source_path / 'More Videos').glob('*.mp4')))
+            list((self.source_path / 'Videos').glob('*.mp4')))
         self.assertTrue(self.source_path.exists())
         self.assertGreater(len(self.sample_images), 0)
         self.assertGreater(len(self.sample_videos), 0)

@@ -2,6 +2,10 @@
 
 The gallery generator.
 
+Demos: https://pmorch.github.io/demo-gallerator/
+
+Homepage: https://github.com/pmorch/gallerator
+
 ## Features
 
 * Static gallery generation that can be used anywhere, also using `file://` urls
@@ -10,7 +14,7 @@ The gallery generator.
 * Generates galleries in a few formats
   * Justified
   * Grid (two variants)
-  * See Demos
+  * See [demos](https://pmorch.github.io/demo-gallerator/)
 * With or without thumbnail captions
 * For a single directory or recursively for an entire tree
   * Includes navigation into sub-directories
@@ -54,10 +58,6 @@ $ xdg-open file:///path/to/images
 ## License
 
 MIT
-
-## Repository
-
-https://github.com/pmorch/gallerator
 
 ## Usage
 

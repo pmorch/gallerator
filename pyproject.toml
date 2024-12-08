@@ -4,7 +4,9 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gallerator"
-version = "0.0.1"
+description = "Generate image galleries"
+readme = "README.md"
+version = "1.0"
 dependencies = [
   "Pillow",
   "vcsi",
@@ -14,6 +16,10 @@ dependencies = [
 ]
 # For Path.relative_to(other, walk_up=True)
 requires-python = ">= 3.12"
+
+[project.urls]
+Homepage = "https://github.com/pmorch/gallerator"
+Demos = "https://pmorch.github.io/demo-gallerator/"
 
 [project.scripts]
 gallerator = "gallerator.main:cli_main"

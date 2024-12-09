@@ -199,29 +199,32 @@ still work. This may not be for everyone, and some may like something like
 
 ### Possible Enhancements
 
+* Avoid FOUC (flash of unstyled content) at startup
+  * When starting up, there is a flash of "small black boxes" while the images
+    load, especially for the default "justified" layout.
 * Parallelize thumbnail generation, e.g. using `Pool.map()`.
   * Note that `vcsi` for generating video screenshots and contact sheets already
     has a `--fast` parameter that parallelizes under the hood so don't
     parallelize that. But we don't (yet) even use `--fast`.
-  * More customizations
-    * Page URL strategies: The naming of output `.html` files is currently
-      hardcoded, but totally doen't have to. Look for
-      `url_strategy.UnderscorePageUrlStrategy` in `gallery.py` and enable it
-      instead, and you can see files are named differently. This just would need
-      to be exposed in the CLI which it isn't (yet?). Patches welcome.
-    * Allow flexible naming of thumbnails with or without SHA1 sums.
-  * It would be great if generating screenshots and contact sheets for videos
-    could be faster. Start with trying `vcsi --fast` 😜.
-  * A little more care and love could be given to generation of thumbnails.
-    * Right now we simply use `PIL.Image.thumbnail(x,y)` - is that enough?
-    * We always scale thumbnails to have 350*350 total pixels, but we probably
-      should scale thumbnails to the width, height and/or layout that will
-      actually be used.
-    * We always link to the source image, however large that may be. Perhaps we
-      should also provide (optional?) scaling of the source images, so we don't
-      serve multi-megabyte images when you click on the thumbnail. See e.g.
-      [Efficient Image Resizing With ImageMagick— Smashing
-      Magazine](https://www.smashingmagazine.com/2015/06/efficient-image-resizing-with-imagemagick/)
+* More customizations
+  * Page URL strategies: The naming of output `.html` files is currently
+    hardcoded, but totally doen't have to. Look for
+    `url_strategy.UnderscorePageUrlStrategy` in `gallery.py` and enable it
+    instead, and you can see files are named differently. This just would need
+    to be exposed in the CLI which it isn't (yet?). Patches welcome.
+  * Allow flexible naming of thumbnails with or without SHA1 sums.
+* It would be great if generating screenshots and contact sheets for videos
+  could be faster. Start with trying `vcsi --fast` 😜.
+* A little more care and love could be given to generation of thumbnails.
+  * Right now we simply use `PIL.Image.thumbnail(x,y)` - is that enough?
+  * We always scale thumbnails to have 350*350 total pixels, but we probably
+    should scale thumbnails to the width, height and/or layout that will
+    actually be used.
+  * We always link to the source image, however large that may be. Perhaps we
+    should also provide (optional?) scaling of the source images, so we don't
+    serve multi-megabyte images when you click on the thumbnail. See e.g.
+    [Efficient Image Resizing With ImageMagick— Smashing
+    Magazine](https://www.smashingmagazine.com/2015/06/efficient-image-resizing-with-imagemagick/)
 
 ### Note on usage with NixOS
 

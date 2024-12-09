@@ -108,22 +108,14 @@ Photoswipe:
   renderers have different options, so try "--renderer name-of-renderer
   --help" to see options for other renderers.
 
-  --justified           By default, Photoswipe uses a justified layout, but
-                        this will create a grid layout. Try e.g. "--grid 4x5",
-                        for 4 columns by 5 rows, but supply your own "XxY"
-                        value to set your own grid layout. This will override
-                        any --pagination value. Beware that this is not
-                        responsive, so it will either be too wide on mobile or
-                        too narrow for large desktop users, or both. (default:
-                        False)
-  --auto-grid           By default, Photoswipe uses a justified layout, but
-                        this will create a grid layout. Try e.g. "--grid 4x5",
-                        for 4 columns by 5 rows, but supply your own "XxY"
-                        value to set your own grid layout. This will override
-                        any --pagination value. Beware that this is not
-                        responsive, so it will either be too wide on mobile or
-                        too narrow for large desktop users, or both. (default:
-                        False)
+  --justified           Use a justified layout (the default), where all images
+                        have the same height, but the width depends on the
+                        image. This is the most dense but different pages may
+                        not have the same height if used with pagination, so
+                        perhaps one other layouts are better with pagination.
+                        (default: False)
+  --auto-grid           Use a grid layout but fit as many columns as will fit
+                        depending on screen width. (default: False)
   --grid GRID           By default, Photoswipe uses a justified layout, but
                         this will create a grid layout. Try e.g. "--grid 4x5",
                         for 4 columns by 5 rows, but supply your own "XxY"

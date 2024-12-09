@@ -54,8 +54,8 @@ class Photoswipe(renderer.Renderer):
     def add_argparse_args(self, parser: argparse.ArgumentParser):
         group = parser.add_argument_group(
             'Photoswipe', description=description)
-        group.add_argument('--justified', action='store_true', help=grid_help)
-        group.add_argument('--auto-grid', action='store_true', help=grid_help)
+        group.add_argument('--justified', action='store_true', help=justified_help)
+        group.add_argument('--auto-grid', action='store_true', help=auto_grid_help)
         group.add_argument('--grid', help=grid_help)
         group.add_argument('--width', default=300, help=width_help)
         group.add_argument('--height', default=300, help=height_help)

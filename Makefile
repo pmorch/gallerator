@@ -41,4 +41,13 @@ update-readme-usage:
 	@echo Updating README.md
 	$(ECHO) ./release-tools/replace-markdown-block.sh README.md usage
 
-update-docs: update-readme-usage
+update-demo:
+	@echo Updating demo
+	$(ECHO) if [ ! -d $(DEMO_GALLERATOR) ] ; then \
+		echo '**ERROR** no dir $(DEMO_GALLERATOR)' ; \
+		exit 1 ; \
+	fi
+	$(ECHO) make -C $(DEMO_GALLERATOR)
+	$(ECHO) git -C $(DEMO_GALLERATOR) status
+
+update-docs: update-readme-usage update-demo

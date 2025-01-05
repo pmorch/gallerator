@@ -217,6 +217,7 @@ still work. This may not be for everyone, and some may like something like
     serve multi-megabyte images when you click on the thumbnail. See e.g.
     [Efficient Image Resizing With ImageMagick— Smashing
     Magazine](https://www.smashingmagazine.com/2015/06/efficient-image-resizing-with-imagemagick/)
+  * Perhaps use [jpegoptim](https://github.com/tjko/jpegoptim) if available?
 
 ### Note on usage with NixOS
 

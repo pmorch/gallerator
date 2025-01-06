@@ -41,6 +41,8 @@ update-readme-usage:
 	@echo Updating README.md
 	$(ECHO) ./release-tools/replace-markdown-block.sh README.md usage
 
+# use make update-demo REMOVE_GALLERIES=yes to make them from scratch, e.g. if
+# you've deleted some static files.
 update-demo:
 	@echo Updating demo
 	$(ECHO) if [ ! -d $(DEMO_GALLERATOR) ] ; then \

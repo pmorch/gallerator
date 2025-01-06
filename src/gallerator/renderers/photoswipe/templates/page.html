@@ -6,7 +6,8 @@
     <link rel="stylesheet" href="{{gallery_root_url}}/static/page.css">
     <link rel="stylesheet" href="{{gallery_root_url}}/static/font-awesome/css/font-awesome.min.css">
     <meta charset="UTF-8" />
-    <script type="module" src="{{gallery_root_url}}/static/page.js"></script>
+    <script src="{{gallery_root_url}}/static/photoswipe.umd.min.js"></script>
+    <script src="{{gallery_root_url}}/static/photoswipe-lightbox.umd.min.js"></script>
 {% endblock %}
 
 
@@ -42,4 +43,5 @@
       </a>
       {% endfor %}
     </div>
+    <script src="{{gallery_root_url}}/static/page.js"></script>
 {% endblock %}

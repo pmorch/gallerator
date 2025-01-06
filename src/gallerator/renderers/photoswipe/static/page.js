@@ -1,11 +1,9 @@
-import PhotoSwipeLightbox from './photoswipe-lightbox.esm.min.js';
-
 const custom_zoom_fraction = 0.9
 
 const lightbox = new PhotoSwipeLightbox({
   gallery: '#my-gallery',
   children: 'a',
-  pswpModule: () => import('./photoswipe.esm.min.js'),
+  pswpModule: PhotoSwipe,
   initialZoomLevel: (zoomLevelObject) => {
     const zooms = []
     for (const dim of ['x', 'y']) {
